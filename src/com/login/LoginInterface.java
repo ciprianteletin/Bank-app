@@ -1,11 +1,19 @@
 package com.login;
+import com.URL;
 import com.automata.FiniteAutomata;
 import com.automata.State;
 import com.core.Application;
+import com.criptography.Decrypt;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+
 /**
  * Interfata de logare, in care utilizatorul isi va introduce datele contului personal;
  * Iar tot prin intermediul acestei clase, vor fi preluate datele din baza de date si alocate clientului
@@ -24,7 +32,7 @@ public class LoginInterface {
      */
     public void start(){
         frame=new JFrame("Login");
-        info=new JPanel(new GridBagLayout());
+        info=new JPanel(new FlowLayout());
         register=new JPanel(new FlowLayout());
         register.setBackground(new Color(223,80,32));
         createImage();
@@ -35,7 +43,6 @@ public class LoginInterface {
         frame.getContentPane().setBackground(new Color(18,119,130));
         info.setBackground(new Color(18,119,130));
         info.setPreferredSize(new Dimension(200,200));
-        info.setLayout(new FlowLayout());
         info.setMaximumSize(info.getPreferredSize());
         logIn=new JButton("Login");
         singUp=new JButton("SignUp");
@@ -81,9 +88,11 @@ public class LoginInterface {
              */
             @Override
             public void focusGained(FocusEvent focus){
-                user.setForeground(new Color(50,70,90));
-                user.setText("");
-                user.setFont (new Font ("TimesRoman", Font.BOLD , 12));
+                if(user.getForeground().equals(new Color(150,150,200))) {
+                    user.setForeground(new Color(50, 70, 90));
+                    user.setText("");
+                    user.setFont(new Font("TimesRoman", Font.BOLD, 12));
+                }
             }
 
             /**
@@ -107,8 +116,10 @@ public class LoginInterface {
              */
             @Override
             public void focusGained(FocusEvent focus) {
-                password.setForeground(new Color(50,70,90));
-                password.setText("");
+                if(password.getForeground().equals(new Color(150,150,200))) {
+                    password.setForeground(new Color(50, 70, 90));
+                    password.setText("");
+                }
             }
 
             /**
@@ -189,12 +200,56 @@ public class LoginInterface {
             }
             else if(!checkIfEmpty()) {
                 JOptionPane.showMessageDialog(frame,"You can't have empty fields!","Empty fields",JOptionPane.WARNING_MESSAGE);
-            }else{
-                JOptionPane.showConfirmDialog(frame, "You logged in successfully!", "You are now logged in", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
-                frame.dispose(); //inchide frame-ul si toate procesele asociate acestuia
-                SwingUtilities.invokeLater(Application::new); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
-            }
+            }else{  Connection connection=null;
+                try {
+                    connection = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                    PreparedStatement pt=connection.prepareStatement("SELECT user FROM users WHERE user=?");
+                    pt.setString(1,user.getText());
+                    ResultSet rs=pt.executeQuery();
+                    //If that user exists in database;
+                    if(rs.next()){
+                        pt=connection.prepareStatement("SELECT password FROM passwords WHERE user=?");
+                        pt.setString(1,user.getText());
+                        rs=pt.executeQuery();
+                        rs.next();  //trec pe randul parolei,fiind una si unica
+                        //o singura parola,pentru un singur user;
+                        String localPass=rs.getString(1);
+                        Decrypt decrypt=new Decrypt(); //decriptez parola
+                        localPass=decrypt.launch(localPass);
+                        if(localPass.equals(password.getText())){
+                            JOptionPane.showConfirmDialog(frame, "You logged in successfully!", "You are now logged in", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
+                            frame.dispose(); //inchide frame-ul si toate procesele asociate acestuia
+                            SwingUtilities.invokeLater(()->new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null,"Wrong password inserted, please retype your password"
+                            ,"Wrong password",JOptionPane.WARNING_MESSAGE);
+                            password.setForeground(new Color(150, 150, 200));
+                            password.setText("Password: ");
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Your username is incorrect or you don't have an account",
+                                "Nonexistent account",JOptionPane.WARNING_MESSAGE);
+                        user.setText("");
+                        password.setForeground(new Color(150, 150, 200));
+                        password.setText("Password: ");
 
+                        user.setForeground(new Color(150,150,200));
+                        user.setText("Username: ");
+                    }
+                }catch (SQLException exception){
+                    System.out.println("Can't connect to database...Closing the app");
+                    System.exit(1);
+                }finally {
+                    try {
+                        if(connection!=null)
+                            connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
 
         singUp.addActionListener((ae) -> {

@@ -219,10 +219,22 @@ class ChooseAccountInterface {
 
             @Override
             public void keyReleased(KeyEvent keyEvent) {
-                if(expireDate.getText().length()==2){
-                    String date=expireDate.getText();
-                    expireDate.setText(date+"/");
+                String onlyNumbers="";
+                for(int i=0;i<expireDate.getText().length();++i) {
+                    char c=expireDate.getText().charAt(i);
+                    if(c>='0' && c<='9'){
+                       onlyNumbers+=c;
+                    }
                 }
+
+                StringBuilder date=new StringBuilder("");
+                for(int i=0;i<onlyNumbers.length();++i){
+                    if(i==2)
+                        date.append('/');
+                    date.append(onlyNumbers.charAt(i));
+                }
+
+                expireDate.setText(date.toString());
             }
         });
     }

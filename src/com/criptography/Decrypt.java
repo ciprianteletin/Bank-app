@@ -47,7 +47,7 @@ public class Decrypt {
                 fin+=(char)(message.charAt(i)+c);
             a=b;
             b=c;
-            c=a+b;
+            c=b+c;
         }
         this.message=fin;
     }

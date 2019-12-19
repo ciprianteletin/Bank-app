@@ -14,8 +14,10 @@ public class Application extends JFrame{
     private JButton cursValutar, settings;
     private JLabel hello, currentFocus, image;
     private JPanel page1;
+    private String username;
 
-    public Application() {
+    public Application(String username) {
+            this.username=username;
             this.setTitle("Main");
             initFirstPage();
             this.setLocationRelativeTo(null);
@@ -35,7 +37,7 @@ public class Application extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     Application.super.dispose();
-                    SwingUtilities.invokeLater(()->new Settings(0));
+                    SwingUtilities.invokeLater(()->new Settings(0,username));
                 }
             });
         }
@@ -45,7 +47,7 @@ public class Application extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                         Application.super.dispose();
-                        SwingUtilities.invokeLater(SecondApplication::new);
+                        SwingUtilities.invokeLater(()->new SecondApplication(username));
                     }
             });
         }
@@ -74,7 +76,7 @@ public class Application extends JFrame{
 
             page1.setBackground(Color.gray);
 
-            hello.setText("Buna, User");
+            hello.setText("Hello, "+this.username);
 
             currentFocus.setText("");
 

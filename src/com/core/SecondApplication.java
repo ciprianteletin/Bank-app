@@ -14,8 +14,10 @@ public class SecondApplication extends JFrame {
     private JPanel page2;
     private JButton switchPage,settings;
     private JLabel hello,image,currentFocus;
+    private String username;
 
-    public SecondApplication(){
+    public SecondApplication(String username){
+        this.username=username;
         this.setTitle("Main");
         initSecondPage();
         this.setLocationRelativeTo(null);
@@ -37,7 +39,7 @@ public class SecondApplication extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SecondApplication.this.dispose();
-                SwingUtilities.invokeLater(()->new Settings(1));
+                SwingUtilities.invokeLater(()->new Settings(1,username));
             }
         });
     }
@@ -47,7 +49,7 @@ public class SecondApplication extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SecondApplication.super.dispose();
-                SwingUtilities.invokeLater(Application::new);
+                SwingUtilities.invokeLater(()->new Application(username));
             }
         });
     }
@@ -69,7 +71,7 @@ public class SecondApplication extends JFrame {
         this.switchPage = new JButton();
         this.settings = new JButton();
 
-        hello.setText("Buna, User");
+        hello.setText("Hello, "+this.username);
         page2.setBackground(Color.gray);
         currentFocus.setText("");
 

@@ -54,7 +54,7 @@ public class Encrypt {
                 fin+=(char)(concat.charAt(i)-c);
             a=b;
             b=c;
-            c=a+b;
+            c=b+c;
         }
         return fin;
     }

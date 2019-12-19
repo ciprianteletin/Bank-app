@@ -1,10 +1,7 @@
+import com.criptography.Decrypt;
+import com.criptography.Encrypt;
 import com.login.LoginInterface;
-
-import com.Utilizator.Card;
-import com.scrapper.PcGarage;
-
 import javax.swing.*;
-import java.sql.*;
 /**
  *  Punctul de start al aplicatiei bancare.
  *  De aici vor porni toate procesele relatate de aplicatia principala
@@ -21,7 +18,7 @@ public class Launch {
              */
        @Override
             public void run() {
-                new LoginInterface().start();
+               new LoginInterface().start();
             }
         });
     }

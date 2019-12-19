@@ -30,7 +30,7 @@ class SingUpInterface{
         singUpFrame=new JFrame("Sign Up");
         singUpFrame.setPreferredSize(new Dimension(500,1005)); //larger enough to fit all the component in an elegant manner;
         singUpFrame.setLocationRelativeTo(null);
-        singUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //I don't want to close the entire project, just this frame
+        singUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         singUpFrame.pack();
         singUpFrame.setVisible(true);
     }
