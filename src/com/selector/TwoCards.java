@@ -12,7 +12,7 @@ public class TwoCards extends JFrame {
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(55,55,55));
+        getContentPane().setBackground(new Color(56,56,56));
         setPreferredSize(new Dimension(600, 300));
         setVisible(true);
     }
@@ -20,12 +20,12 @@ public class TwoCards extends JFrame {
     private void initComponents() {
 
         card1 = new JButton();
-        card1.setBackground(new Color(55,55,55));
+        card1.setBackground(new Color(56,56,56));
         card1.setForeground(new Color(255,255,255));
         card1.setIcon(new ImageIcon("/home/cipri/Downloads/card1.png"));
         card1.setBorderPainted(false);
         card2 = new JButton();
-        card2.setBackground(new Color(55,55,55));
+        card2.setBackground(new Color(56,56,56));
         card2.setForeground(new Color(255,255,255));
         card2.setIcon(new ImageIcon("/home/cipri/Downloads/card2.png"));
         card2.setBorderPainted(false);
