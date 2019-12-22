@@ -1,6 +1,5 @@
 package com.Utilizator;
 
-import java.util.ArrayList;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +8,7 @@ public class Client {
     private String username;
     private int age;
     private Card currentCard; //retains the current card;
-    private int currentNumberID; //number of card in DB
-    private int cardNumber=1; //the number of cards of this account;
+    private int cardNumber; //the number of cards of this account;
     private String job;
 
     public Client(String username, String date, String job){
@@ -41,6 +39,8 @@ public class Client {
         currentCard=current;
     }
 
+    public Card getCurrentCard(){return currentCard;}
+
     public int getCardNumber(){
         return cardNumber;
     }
@@ -48,8 +48,6 @@ public class Client {
     public void setCardNumber(int number){
         cardNumber=number;
     }
-
-    public void setCurrentNumberID(int numberID){currentNumberID=numberID;}
 
     public String getJob(){return this.job;}
 

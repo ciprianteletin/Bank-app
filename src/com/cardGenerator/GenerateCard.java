@@ -7,7 +7,7 @@ import com.URL;
 import com.Utilizator.Card;
 
 //TODO, dar ne trebuie mai intai clasa card aici, ca sa pot adauga ce e nevoie
-//LA SIGN UP si ADD CARD, generam card de aici, folosim ORDINAL si chestii
+//LA SIGN UP si ADD CARD, generam card de aici;
 public abstract class GenerateCard {
     //method to generate cards; the first one will keep the salary in it, and of course here will be the main wealth of the user;
 

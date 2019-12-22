@@ -2,7 +2,7 @@ package com.cardGenerator;
 
 public enum Currency {
     //Buy and sell currency;
-    EURO(4.7,4.82),DOLAR(4.24,4.4),LIRA(5.52,5.75);
+    EURO(0,0),DOLAR(0,0),LIRA(0,0);
 
     private double cumparare;
     private double vanzare;
@@ -12,11 +12,25 @@ public enum Currency {
         vanzare=v2;
     }
 
+    public void setCurrency(double valoare){
+        valoare=Math.round(valoare*100)/100.0;
+        cumparare=valoare;
+        vanzare=valoare+0.2;
+    }
+
     public double convertInLei(double suma){
         return suma/cumparare;
     }
 
     public double convertDinLei(double suma){
         return suma*vanzare;
+    }
+
+    public double getCumparare(){
+        return this.cumparare;
+    }
+
+    public double getVanzare(){
+        return this.vanzare;
     }
 }

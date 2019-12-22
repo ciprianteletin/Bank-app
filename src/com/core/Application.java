@@ -1,4 +1,5 @@
 package com.core;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,7 @@ public class Application extends JFrame{
             this.focusOn();
             this.setResizable(false);
             setVisible(true);
+            makeButtons();
         }
         private void focusOn(){
             SwingUtilities.invokeLater(currentFocus::requestFocus);
@@ -49,6 +51,15 @@ public class Application extends JFrame{
                         Application.super.dispose();
                         SwingUtilities.invokeLater(()->new SecondApplication(username));
                     }
+            });
+        }
+
+        private void makeButtons(){
+            cursValutar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    SwingUtilities.invokeLater(CursValutarButton::new);
+                }
             });
         }
 

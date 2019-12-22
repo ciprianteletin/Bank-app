@@ -15,6 +15,7 @@ public class TwoCards extends JFrame {
         getContentPane().setBackground(new Color(56,56,56));
         setPreferredSize(new Dimension(600, 300));
         setVisible(true);
+        setResizable(false);
     }
 
     private void initComponents() {

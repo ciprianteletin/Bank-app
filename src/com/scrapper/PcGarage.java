@@ -44,7 +44,6 @@ public class PcGarage extends Scrapper {
     public void scrape() {
         try{
             Document doc=Jsoup.connect(url).get();
-            Elements html=doc.select("div.ps-top-taller.ps-top");
             makeByRateAndDiscount(doc);
             System.out.println(productName+" "+price);
 

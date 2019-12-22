@@ -1,7 +1,9 @@
-import com.criptography.Decrypt;
-import com.criptography.Encrypt;
+import com.cardGenerator.Currency;
+import com.core.CursValutarButton;
 import com.login.LoginInterface;
+import com.scrapper.CursValutar;
 import javax.swing.*;
+
 /**
  *  Punctul de start al aplicatiei bancare.
  *  De aici vor porni toate procesele relatate de aplicatia principala
@@ -18,8 +20,12 @@ public class Launch {
              */
        @Override
             public void run() {
-               new LoginInterface().start();
-            }
+           CursValutar curs=new CursValutar();
+           Currency.EURO.setCurrency(curs.getEuro());
+           Currency.DOLAR.setCurrency(curs.getDolar());
+           Currency.LIRA.setCurrency(curs.getLira());
+           new LoginInterface().start();
+       }
         });
     }
 }

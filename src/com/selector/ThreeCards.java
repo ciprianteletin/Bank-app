@@ -16,7 +16,10 @@ public class ThreeCards extends JFrame {
     public ThreeCards() {
         this.getContentPane().setBackground(new Color(56,56,56));
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(672, 300));
         initComponents();
+        setResizable(false);
     }
 
     private void initComponents() {
@@ -53,9 +56,6 @@ public class ThreeCards extends JFrame {
         typeCard3.setForeground(new Color(255,255,255));
         focusLabel = new JLabel();
         SwingUtilities.invokeLater(focusLabel::requestFocus);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(672, 300));
         card1.setPreferredSize(new Dimension(200, 180));
         card2.setPreferredSize(new Dimension(200, 180));
         card3.setPreferredSize(new Dimension(200, 180));
