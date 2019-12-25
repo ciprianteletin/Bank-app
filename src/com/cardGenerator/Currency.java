@@ -13,9 +13,9 @@ public enum Currency {
     }
 
     public void setCurrency(double valoare){
-        valoare=Math.round(valoare*100)/100.0;
-        cumparare=valoare;
-        vanzare=valoare+0.2;
+        valoare = Math.round(valoare * 100) / 100.0;
+        cumparare = valoare;
+        vanzare = Math.round((valoare + 0.2) * 100) / 100.0;
     }
 
     public double convertInLei(double suma){

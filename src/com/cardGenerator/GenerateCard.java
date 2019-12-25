@@ -23,14 +23,16 @@ public abstract class GenerateCard {
         //IBAN generator
         TipCard tipCard;
         int tip;
-
-        if(age<=26) {
-            underStudent=true; //I created this to check if the person is under 26, to give to him a lower lunar income;
-            //also, a student can have only one card. I assume that my student isn't working, to make things much interesting;
-            tipCard=TipCard.Student; //under 26, so he has different benefits;
+        boolean unemployed=false;
+        if(age<=26 || job.toLowerCase().equals("student")) {
+            underStudent=true; //if it's under 26 or a student, I assume that he's not working and that it has a student
+            //card, and only one
+            tipCard=TipCard.Student;
         }
-        else if(job.toLowerCase().equals("student") || job.toLowerCase().equals("unemployed")){
-            underStudent=true;
+        else if(job.toLowerCase().equals("unemployed")){
+            //an unemployed person can have multiple cards(3), but with a lower amount of money on it based on age
+            // this time;
+            unemployed=true;
             tip = r.nextInt(4); //card type random;
             tipCard = TipCard.values()[tip];
         }
@@ -52,7 +54,7 @@ public abstract class GenerateCard {
         int salaryDate=-1;
         if(cardNumber==1) {
             salaryDate = r.nextInt(20) + 1;
-            if (underStudent) {
+            if (underStudent || unemployed) {
                 sum = (Math.round(r.nextDouble()*100) / 100.0 + 0.4) * 1500.0; //Student or unemployed, so he has a hard life with money :))
                 salary = (Math.round(r.nextDouble()*100) / 100.0 + 0.5) * 1000.0;
             } else if (age <= 32) {
@@ -67,12 +69,14 @@ public abstract class GenerateCard {
             }
 
         }else{
-            if(age <= 32){
-                sum=(Math.round(r.nextDouble()*100) / 100.0+0.2)*1250.0;
+            if (unemployed) {
+                sum = (Math.round(r.nextDouble() * 100) / 100.0 + 0.1) * 1000.0;
+            }else if(age <= 32){
+                sum = (Math.round(r.nextDouble() * 100) / 100.0 + 0.2) * 1250.0;
             }else if(age<=45){
-                sum=(Math.round(r.nextDouble()*100) / 100.0+0.4)*1550.0;
+                sum = (Math.round(r.nextDouble() * 100) / 100.0 + 0.4) * 1550.0;
             }else{
-                sum=(Math.round(r.nextDouble()*100) / 100.0+0.6)*1950.0;
+                sum = (Math.round(r.nextDouble() * 100) / 100.0 + 0.6) * 1950.0;
             }
         }
         if(moneda.equals("Euro")){

@@ -28,6 +28,7 @@ public class SecondApplication extends JFrame {
         this.focusOn();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
+        this.makeButtons();
     }
 
     private void focusOn(){
@@ -57,6 +58,17 @@ public class SecondApplication extends JFrame {
     private void setImage(){
         ImageIcon img=new ImageIcon("/home/cipri/Downloads/online-shop.png");
         image=new JLabel("",img,JLabel.CENTER);
+    }
+
+    private void makeButtons(){
+        IBAN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JOptionPane.showMessageDialog(null,"Press print button if you want" +
+                        " your info into a PDF","IBAN display",JOptionPane.DEFAULT_OPTION);
+                SwingUtilities.invokeLater(()->new IbanDisplay(username));
+            }
+        });
     }
 
     private void initSecondPage(){

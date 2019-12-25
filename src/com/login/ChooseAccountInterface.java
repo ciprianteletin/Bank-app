@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import com.URL;
-import com.Utilizator.Card;
 import com.automata.State;
 import com.automata.FiniteAutomata;
 import com.cardGenerator.GenerateCard;
@@ -385,7 +384,8 @@ class ChooseAccountInterface {
                     while(result.next()){
                         ++cardNr;
                     }
-                    if(job.toLowerCase().equals("student") && cardNr==1){
+
+                    if((job.toLowerCase().equals("student") || age<=26) && cardNr==1){
                         JOptionPane.showMessageDialog(null,"A student can have only one card recorded",
                                 "Too many cards!",JOptionPane.WARNING_MESSAGE);
                         SwingUtilities.invokeLater(new LoginInterface()::start);
@@ -415,7 +415,7 @@ class ChooseAccountInterface {
 
                         else{
                             GenerateCard.generate(age,job,cardNr+1,username,cardNumber.getText(),
-                                    CVV.getText(),expireDate.getText(),'F');
+                                    CVV.getText(),expireDate.getText(),'T');
                             JOptionPane.showConfirmDialog(null, "Your account was created with success!",
                                     "Success!",JOptionPane.DEFAULT_OPTION);
                             SwingUtilities.invokeLater(new LoginInterface()::start);
