@@ -14,6 +14,7 @@ import com.URL;
 import com.automata.State;
 import com.automata.FiniteAutomata;
 import com.cardGenerator.GenerateCard;
+import com.core.Settings;
 
 /**
 This class has the scope to let the client to choose what type of card they posses, at what bank, with what kind of costs in
@@ -24,7 +25,7 @@ This class has the scope to let the client to choose what type of card they poss
  Also, I will generate random card type and from what bank is it, because I'm thinking that the card is recognised automated
  based on the provided information
  */
-class ChooseAccountInterface {
+public class ChooseAccountInterface {
     private ImagePanel accountPanel;
     private JFrame account;
     private JTextField cardNumber,CVV;
@@ -34,7 +35,7 @@ class ChooseAccountInterface {
     private int age;
     private String job;
 
-    ChooseAccountInterface(String username,int age,String job){
+    public ChooseAccountInterface(String username,int age,String job){
         this.username=username;
         this.age=age;
         this.job=job;
@@ -65,24 +66,28 @@ class ChooseAccountInterface {
         account.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 try {
-
                     Connection connection = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
-                    PreparedStatement pst=connection.prepareStatement("DELETE FROM adress WHERE user=?");
+                    PreparedStatement pst=connection.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                     pst.setString(1,username);
-                    pst.executeUpdate();
+                    ResultSet rs=pst.executeQuery();
+                    //in case of having already an account and want to add another card on it;
+                    if(!rs.next()) {
+                        pst = connection.prepareStatement("DELETE FROM adress WHERE user=?");
+                        pst.setString(1, username);
+                        pst.executeUpdate();
 
-                    pst=connection.prepareStatement("DELETE FROM info WHERE user=?");
-                    pst.setString(1,username);
-                    pst.executeUpdate();
+                        pst = connection.prepareStatement("DELETE FROM info WHERE user=?");
+                        pst.setString(1, username);
+                        pst.executeUpdate();
 
-                    pst=connection.prepareStatement("DELETE FROM passwords WHERE user=?");
-                    pst.setString(1,username);
-                    pst.executeUpdate();
+                        pst = connection.prepareStatement("DELETE FROM passwords WHERE user=?");
+                        pst.setString(1, username);
+                        pst.executeUpdate();
 
-                    pst=connection.prepareStatement("DELETE FROM users WHERE user=?");
-                    pst.setString(1,username);
-                    pst.executeUpdate();
-
+                        pst = connection.prepareStatement("DELETE FROM users WHERE user=?");
+                        pst.setString(1, username);
+                        pst.executeUpdate();
+                    }
                     connection.close();
 
                 }catch (SQLException err){
@@ -98,8 +103,10 @@ class ChooseAccountInterface {
         cardNumber.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent focusEvent) {
-                cardNumber.setText("");
-                cardNumber.setForeground(new Color(50,70,90));
+                if(cardNumber.getForeground().equals(new Color(150,150,200))) {
+                    cardNumber.setText("");
+                    cardNumber.setForeground(new Color(50, 70, 90));
+                }
             }
 
             @Override
@@ -114,8 +121,10 @@ class ChooseAccountInterface {
         CVV.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent focusEvent) {
-                CVV.setText("");
-                CVV.setForeground(new Color(50,70,90));
+                if(CVV.getForeground().equals(new Color(150,150,200))) {
+                    CVV.setText("");
+                    CVV.setForeground(new Color(50, 70, 90));
+                }
             }
 
             @Override
@@ -130,8 +139,10 @@ class ChooseAccountInterface {
         expireDate.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent focusEvent) {
-                expireDate.setText("");
-                expireDate.setForeground(new Color(50,70,90));
+                if(expireDate.getForeground().equals(new Color(150,150,200))) {
+                    expireDate.setText("");
+                    expireDate.setForeground(new Color(50, 70, 90));
+                }
             }
 
             @Override
@@ -364,9 +375,12 @@ class ChooseAccountInterface {
     }
 
     private void clear(){
-        CVV.setText("");
-        cardNumber.setText("");
-        expireDate.setText("");
+        CVV.setText("CVV: ");
+        CVV.setForeground(new Color(150,150,200));
+        cardNumber.setText("Card number: ");
+        cardNumber.setForeground(new Color(150,150,200));
+        expireDate.setText("Expire date mm/yyyy: ");
+        expireDate.setForeground(new Color(150,150,200));
     }
 
     private void buttonOnAction(){
@@ -414,11 +428,19 @@ class ChooseAccountInterface {
                         }
 
                         else{
+                            char current='F';
+                            //if it's the first card, then current will be T, else will be F because we already
+                            //have a current card;
+                            if(cardNr==0)
+                                current='T';
                             GenerateCard.generate(age,job,cardNr+1,username,cardNumber.getText(),
-                                    CVV.getText(),expireDate.getText(),'T');
-                            JOptionPane.showConfirmDialog(null, "Your account was created with success!",
+                                    CVV.getText(),expireDate.getText(),current);
+                            JOptionPane.showConfirmDialog(null, "Your card was inserted with success!",
                                     "Success!",JOptionPane.DEFAULT_OPTION);
-                            SwingUtilities.invokeLater(new LoginInterface()::start);
+                            if(cardNr==0)
+                                SwingUtilities.invokeLater(new LoginInterface()::start);
+                            else
+                                SwingUtilities.invokeLater(()->new Settings(1,username));
                             account.dispose();
                         }
                     }

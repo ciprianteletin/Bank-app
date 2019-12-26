@@ -47,6 +47,8 @@ public abstract class GenerateCard {
         if(tipCard==TipCard.Calator) {
             limita=Math.round(Currency.EURO.convertInLei(limita)*100)/100.0;
             moneda = "Euro";
+        }else if(tipCard==TipCard.Depozit){
+            limita=-1;
         }
 
         //for the salary and sum I will consider the age of the person; first, I will check if he is student or unemployed or under 26

@@ -1,11 +1,16 @@
 package com.core;
 
+import com.URL;
+import com.login.ChooseAccountInterface;
 import com.login.LoginInterface;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Settings extends JFrame {
     private JButton changeCard, addCard;
@@ -30,6 +35,8 @@ public class Settings extends JFrame {
         this.backButton();
         this.mainButtons();
         this.add(label);
+        this.deleteAccountButton();
+        this.addCardButton();
         SwingUtilities.invokeLater(label::requestFocus);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -59,6 +66,97 @@ public class Settings extends JFrame {
         });
     }
 
+    private void deleteAccountButton(){
+        deleteAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int del=JOptionPane.showConfirmDialog(null,"All your data will be lost! " +
+                        "Are you sure about this operation?","Delete account",JOptionPane.YES_NO_OPTION);
+                if(del==JOptionPane.YES_OPTION){
+                    try {
+                        Connection conn = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                        //passwords table
+                        PreparedStatement pst=conn.prepareStatement("DELETE FROM passwords WHERE user=?");
+                        pst.setString(1,username);
+                        pst.executeUpdate();
+                        //address table
+                        pst=conn.prepareStatement("DELETE FROM adress WHERE user=?");
+                        pst.setString(1,username);
+                        pst.executeUpdate();
+                        //info table
+                        pst=conn.prepareStatement("DELETE FROM info WHERE user=?");
+                        pst.setString(1,username);
+                        pst.executeUpdate();
+                        //get cardID
+                        pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                        pst.setString(1,username);
+                        ResultSet rs=pst.executeQuery();
+                        while(rs.next()){
+                            int ID=rs.getInt(1);
+                            //card_type for all the cards
+                            pst=conn.prepareStatement("DELETE FROM card_type WHERE cardID=?");
+                            pst.setInt(1,ID);
+                            pst.executeUpdate();
+                            //financiar
+                            pst=conn.prepareStatement("DELETE FROM financiar WHERE cardID=?");
+                            pst.setInt(1,ID);
+                            pst.executeUpdate();
+                            //tranzactii
+                            pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
+                            pst.setInt(1,ID);
+                            pst.executeUpdate();
+                            //finally,card_data
+                            pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
+                            pst.setInt(1,ID);
+                            pst.executeUpdate();
+                        }
+                        //finally,delete the account
+                        pst=conn.prepareStatement("DELETE FROM users WHERE user=?");
+                        pst.setString(1,username);
+                        pst.executeUpdate();
+
+                        //if I delete the last user, I want the cardID to stay at his position;
+                        pst=conn.prepareStatement("ALTER TABLE card_data AUTO_INCREMENT=1");
+                        pst.executeUpdate();
+                        Settings.this.dispose(); //hmm, interesting, this is static
+                        SwingUtilities.invokeLater(()->new LoginInterface().start());
+                        conn.close();
+                    }catch (SQLException err){
+                        JOptionPane.showConfirmDialog(null,"Can't connect to database.." +
+                                "abort this operation");
+                    }
+                }
+            }
+        });
+    }
+
+    private void addCardButton(){
+        addCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try{
+                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    PreparedStatement pst=conn.prepareStatement("SELECT birthday,job FROM info WHERE user=?");
+                    pst.setString(1,username);
+                    ResultSet rs=pst.executeQuery();
+                    rs.next(); //account 100% existent! And only one!
+                    Date dt=rs.getDate(1);
+                    LocalDate lc=dt.toLocalDate();
+                    LocalDate current=LocalDate.now();
+                    int age=(int)ChronoUnit.YEARS.between(lc,current);
+                    System.out.println(age);
+                    String job=rs.getString(2);
+                    SwingUtilities.invokeLater(()->new ChooseAccountInterface(username,age,job));
+                    Settings.this.dispose();
+                    conn.close();
+                }catch (SQLException sql){
+                    JOptionPane.showMessageDialog(null,"Can't connect to database.." +
+                            "abort this operation..","Connection error",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
     private void createImg(){
         ImageIcon img=new ImageIcon("/home/cipri/Downloads/technical-support.png");
         image=new JLabel("",img,JLabel.CENTER);
@@ -67,24 +165,31 @@ public class Settings extends JFrame {
     private void setColors(){
         changeCard.setBackground(new Color(5,56,107));
         changeCard.setForeground(new Color(237, 245, 225));
+        changeCard.setFocusPainted(false);
 
         addCard.setBackground(new Color(5,56,107));
         addCard.setForeground(new Color(237, 245, 225));
+        addCard.setFocusPainted(false);
 
         changePassword.setBackground(new Color(5,56,107));
         changePassword.setForeground(new Color(237, 245, 225));
+        changePassword.setFocusPainted(false);
 
         removeCard.setBackground(new Color(5,56,107));
         removeCard.setForeground(new Color(237, 245, 225));
+        removeCard.setFocusPainted(false);
 
         blockCard.setBackground(new Color(5,56,107));
         blockCard.setForeground(new Color(237, 245, 225));
+        blockCard.setFocusPainted(false);
 
         removeCard.setBackground(new Color(5,56,107));
         removeCard.setForeground(new Color(237, 245, 225));
+        removeCard.setFocusPainted(false);
 
         deleteAccount.setBackground(new Color(5,56,107));
         deleteAccount.setForeground(new Color(237, 245, 225));
+        deleteAccount.setFocusPainted(false);
 
         logout.setBackground(new Color(5,56,107));
         logout.setForeground(new Color(237, 245, 225));

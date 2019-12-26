@@ -2,7 +2,7 @@ package com.selector;
 
 import javax.swing.*;
 import java.awt.*;
-
+//TODO
 public class ThreeCards extends JFrame {
 
     private JButton card1;
@@ -12,8 +12,10 @@ public class ThreeCards extends JFrame {
     private JLabel bankCard1, numberCard1, typeCard1;
     private JLabel bankCard2, numberCard2, typeCard2;
     private JLabel bankCard3, numberCard3, typeCard3;
+    private String username;
 
-    public ThreeCards() {
+    public ThreeCards(String username) {
+        this.username=username;
         this.getContentPane().setBackground(new Color(56,56,56));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

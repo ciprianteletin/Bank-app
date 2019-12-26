@@ -95,32 +95,37 @@ public class Application extends JFrame{
             plataFactura.setPreferredSize(new Dimension(125, 30));
             plataFactura.setBackground(new Color(56,56,56));
             plataFactura.setForeground(new Color(211,211,211));
+            plataFactura.setFocusPainted(false);
 
             plataOnline.setText("PlataOnline");
             plataOnline.setPreferredSize(new Dimension(125, 30));
             plataOnline.setBackground(new Color(56,56,56));
             plataOnline.setForeground(new Color(211,211,211));
+            plataOnline.setFocusPainted(false);
 
             transfer.setText("Transfer");
             transfer.setPreferredSize(new Dimension(125, 30));
             transfer.setBackground(new Color(56,56,56));
             transfer.setForeground(new Color(211,211,211));
+            transfer.setFocusPainted(false);
 
             transferPersonal.setText("TransPers");
             transferPersonal.setPreferredSize(new Dimension(125,30));
             transferPersonal.setBackground(new Color(56,56,56));
             transferPersonal.setForeground(new Color(211,211,211));
-
+            transferPersonal.setFocusPainted(false);
 
             conversie.setText("Conversie");
             conversie.setPreferredSize(new Dimension(125, 30));
             conversie.setBackground(new Color(56,56,56));
             conversie.setForeground(new Color(211,211,211));
+            conversie.setFocusPainted(false);
 
             cursValutar.setText("CursValutar");
             cursValutar.setPreferredSize(new Dimension(125, 30));
             cursValutar.setBackground(new Color(56,56,56));
             cursValutar.setForeground(new Color(211,211,211));
+            cursValutar.setFocusPainted(false);
 
             GroupLayout page1Layout = new GroupLayout(page1);
             page1.setLayout(page1Layout);

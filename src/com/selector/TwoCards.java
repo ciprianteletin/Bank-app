@@ -2,13 +2,16 @@ package com.selector;
 
 import javax.swing.*;
 import java.awt.*;
+//TODO
 public class TwoCards extends JFrame {
     private JButton card1, card2;
     private JLabel bancaCard1, numarCard1, bancaCard2;
     private JLabel numarCard2, tipCard1, tipCard2;
     private JLabel focusLabel;
+    private String username;
 
-    public TwoCards() {
+    public TwoCards(String username) {
+        this.username=username;
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

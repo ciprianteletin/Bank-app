@@ -93,6 +93,8 @@ public class IbanDisplay {
                 bank="Banca Transilvania";
             else if(bank.equals("BCR"))
                 bank="Banca Comerciala Romana";
+            else if(bank.equals("BRD"))
+                bank="Banca Romana de Dezvoltare";
             bancas.setText(bank);
             tips.setText(rs.getString(3));
 

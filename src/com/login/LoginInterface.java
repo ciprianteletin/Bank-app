@@ -219,7 +219,25 @@ public class LoginInterface {
                         if(localPass.equals(password.getText())){
                             JOptionPane.showConfirmDialog(frame, "You logged in successfully!", "You are now logged in", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
                             frame.dispose(); //inchide frame-ul si toate procesele asociate acestuia
-                            SwingUtilities.invokeLater(()->new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                            //daca sunt egale parolele, atunci verificam numarul de carduri din cont si il lasam sa aleaga cardul dorit;
+                            //daca are unul singur, intram pe unicul card;
+                            pt=connection.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                            int cardNr=0;
+                            pt.setString(1,user.getText());
+                            rs=pt.executeQuery();
+                            while(rs.next())
+                                ++cardNr;
+                            if(cardNr==1)
+                                SwingUtilities.invokeLater(()->new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                            else if(cardNr==2){
+                                //invoke two cards;
+                                //TODO
+
+                            }
+                            else{
+                                //invoke three cards;
+                                //TODO
+                            }
                         }
                         else{
                             JOptionPane.showMessageDialog(null,"Wrong password inserted, please retype your password"
@@ -291,5 +309,5 @@ public class LoginInterface {
             return false;
         return true;
     }
-    //TODO accesare date client din baza de date in cadrul logarii
+    //TODO creare obiect de tip card;
 }

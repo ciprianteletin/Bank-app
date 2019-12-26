@@ -90,18 +90,22 @@ public class SecondApplication extends JFrame {
         istoricTranzactii.setPreferredSize(new Dimension(125,30));
         istoricTranzactii.setBackground(new Color(56,56,56));
         istoricTranzactii.setForeground(new Color(211,211,211));
+        istoricTranzactii.setFocusPainted(false);
 
         soldCurent.setPreferredSize(new Dimension(125,30));
         soldCurent.setBackground(new Color(56,56,56));
         soldCurent.setForeground(new Color(211,211,211));
+        soldCurent.setFocusPainted(false);
 
         IBAN.setPreferredSize(new Dimension(125,30));
         IBAN.setBackground(new Color(56,56,56));
         IBAN.setForeground(new Color(211,211,211));
+        IBAN.setFocusPainted(false);
 
         searchTransaction.setPreferredSize(new Dimension(125,30));
         searchTransaction.setBackground(new Color(56,56,56));
         searchTransaction.setForeground(new Color(211,211,211));
+        searchTransaction.setFocusPainted(false);
 
         GroupLayout page2Layout = new GroupLayout(page2);
         page2.setLayout(page2Layout);

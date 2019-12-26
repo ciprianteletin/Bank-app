@@ -1,11 +1,11 @@
 package com.cardGenerator;
 
 public enum Banci {
-    BCR(1.5,0.7,2.3,0.3,"RNCB",2850),
-    BT(1.0,0.7,3.4,0.5,"BTRL",3500),
+    BCR(1.5,0.7,2.3,0.3,"RNCB",2650),
+    BT(1.0,0.7,3.4,0.5,"BTRL",3200),
     ING(2.5,2.1,0.8,0.4,"INGB",3000),
-    RAIFFEISEN(0.5,2.6,3.4,0.2,"RZBR",4000),
-    BRD(2.3,1.1,1.7,0.1,"BRDE",3250);
+    RAIFFEISEN(0.5,2.6,3.4,0.2,"RZBR",3550),
+    BRD(2.3,1.1,1.7,0.1,"BRDE",2300);
 
     private double com_online;
     private double com_factura;

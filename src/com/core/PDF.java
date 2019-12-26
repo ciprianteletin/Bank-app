@@ -72,7 +72,7 @@ public class PDF {
     public void createDoc(){
         try {
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(path+".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(path));
             document.open();
             addMetaData(document);
             addTitlePage(document);

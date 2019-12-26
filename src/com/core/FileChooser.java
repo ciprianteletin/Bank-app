@@ -143,10 +143,28 @@ public class FileChooser {
         print.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                PDF pdf=new PDF(IBAN,fullname,bank,type,pathName.getText());
-                pdf.createDoc();
-                JOptionPane.showMessageDialog(null,"Your pdf is ready to be printed!");
-                display.dispose();
+                File f=new File(pathName.getText()+".pdf");
+                boolean create=true;
+                if(f.exists()){
+                    int result=JOptionPane.showConfirmDialog(null,"The file already exists!Do " +
+                            "you want to override it?","Existent file",JOptionPane.YES_NO_OPTION);
+                    if(result==JOptionPane.YES_OPTION){
+                        if(!f.delete()){
+                            JOptionPane.showMessageDialog(null,"Failed to delete the actual file," +
+                                    " please choose another name for your PDF");
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Choose another name!");
+                        create=false;
+                    }
+                }
+                if(create) {
+                    PDF pdf = new PDF(IBAN, fullname, bank, type, pathName.getText()+".pdf");
+                    pdf.createDoc();
+                    JOptionPane.showMessageDialog(null, "Your pdf is ready to be printed!");
+                    display.dispose();
+                }
             }
         });
     }

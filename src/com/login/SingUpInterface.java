@@ -179,6 +179,7 @@ class SingUpInterface{
         this.confirm=new JButton("Confirm");
 
         this.reset.setPreferredSize(new Dimension(100,40));
+        this.reset.setFocusPainted(false);
         this.confirm.setPreferredSize(new Dimension(100,40));
 
         JLabel label=new JLabel("Hide");

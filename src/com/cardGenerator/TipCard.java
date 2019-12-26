@@ -3,10 +3,10 @@ package com.cardGenerator;
 public enum TipCard {
     //a student is basically a student, no job or another income source, except his parents;
     Debit(0.1,0,0.7,1.5,400),
-    Calator(0.3,0.1,0.1,0.2,5000),
+    Calator(0.3,0.1,0.1,0.2,2500),
     Depozit(0.2,0.9,0.6,2,-1),
-    Salarial(0.1,0.5,0.2,2.2,2500),
-    Student(0,0,0,5,2000);
+    Salarial(0.1,0.5,0.2,2.2,2000),
+    Student(0,0,0,5,1000);
 
     private double com_online;
     private double com_factura;
