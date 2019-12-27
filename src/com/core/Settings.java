@@ -3,6 +3,8 @@ package com.core;
 import com.URL;
 import com.login.ChooseAccountInterface;
 import com.login.LoginInterface;
+import com.selector.ThreeCards;
+import com.selector.TwoCards;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,7 @@ public class Settings extends JFrame {
         this.add(label);
         this.deleteAccountButton();
         this.addCardButton();
+        this.changeButton();
         SwingUtilities.invokeLater(label::requestFocus);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -62,6 +65,38 @@ public class Settings extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 Settings.this.dispose();
                 SwingUtilities.invokeLater(()->new LoginInterface().start());
+            }
+        });
+    }
+
+    private void changeButton(){
+        changeCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try{
+                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                    pst.setString(1,username);
+                    ResultSet rs=pst.executeQuery();
+                    int cardNr=0;
+                    while(rs.next()){
+                        ++cardNr;
+                    }
+                    if(cardNr==1)
+                        JOptionPane.showMessageDialog(null,"You only have one card!",
+                                "One card",JOptionPane.WARNING_MESSAGE);
+                    else if(cardNr==2){
+                        SwingUtilities.invokeLater(()->new TwoCards(username));
+                        Settings.this.dispose();
+                    }
+                    else{
+                        SwingUtilities.invokeLater(()->new ThreeCards(username));
+                        Settings.this.dispose();
+                    }
+                }catch (SQLException sql){
+                    JOptionPane.showMessageDialog(null,"Can't change the card...Error" +
+                            " from database","Error",JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
     }

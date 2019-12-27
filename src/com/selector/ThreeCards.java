@@ -1,10 +1,16 @@
 package com.selector;
 
+import com.URL;
+import com.core.Application;
+
 import javax.swing.*;
 import java.awt.*;
-//TODO
-public class ThreeCards extends JFrame {
+import java.sql.*;
 
+//TODO
+public class ThreeCards{
+
+    private JFrame display;
     private JButton card1;
     private JButton card2;
     private JButton card3;
@@ -12,20 +18,116 @@ public class ThreeCards extends JFrame {
     private JLabel bankCard1, numberCard1, typeCard1;
     private JLabel bankCard2, numberCard2, typeCard2;
     private JLabel bankCard3, numberCard3, typeCard3;
+    private int ID1,ID2,ID3;
     private String username;
+    private JPanel panelCard1,panelCard2,panelCard3;
 
     public ThreeCards(String username) {
         this.username=username;
-        this.getContentPane().setBackground(new Color(56,56,56));
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(672, 300));
+        display=new JFrame("Three cards");
+        display.setLayout(new GridLayout(1,3));
+        display.getContentPane().setBackground(new Color(56,56,56));
+        display.setLocationRelativeTo(null);
+        display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        display.setSize(new Dimension(450, 330));
         initComponents();
-        setResizable(false);
+        makeCardsF();
+        updateData();
+        configButtons();
+        display.setResizable(false);
+        display.setVisible(true);
+    }
+
+    private void updateData(){
+        try{
+            int contor=1;
+            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("SELECT cardID,number FROM card_data WHERE user=?");
+            pst.setString(1,username);
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                int cardID=rs.getInt(1);
+                String number=rs.getString(2);
+                pst=conn.prepareStatement("SELECT banca,tip FROM card_type WHERE cardID=?");
+                pst.setInt(1,cardID);
+                ResultSet result=pst.executeQuery();
+                result.next();
+                String banca=result.getString(1);
+                String tip=result.getString(2);
+                if(contor==1){
+                    ID1=cardID;
+                    numberCard1.setText(number);
+                    bankCard1.setText(banca);
+                    typeCard1.setText(tip);
+                }
+                else if(contor==2){
+                    ID2=cardID;
+                    numberCard2.setText(number);
+                    bankCard2.setText(banca);
+                    typeCard2.setText(tip);
+                }else{
+                    ID3=cardID;
+                    numberCard3.setText(number);
+                    bankCard3.setText(banca);
+                    typeCard3.setText(tip);
+                }
+                ++contor;
+            }
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't update card data..exit the app","Error",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void makeID(int ID){
+        try{
+            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
+            pst.setString(1,"T");
+            pst.setInt(2,ID);
+            pst.executeUpdate();
+            display.dispose();
+            SwingUtilities.invokeLater(()->new Application(username));
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't select the card from database.." +
+                    "closing the app");
+            System.exit(1);
+        }
+    }
+
+    private void configButtons(){
+        card1.addActionListener((ae)->makeID(ID1));
+        card2.addActionListener((ae)->makeID(ID2));
+        card3.addActionListener((ae)->makeID(ID3));
+    }
+
+    private void makeCardsF(){
+        try{
+            Connection conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+            pst.setString(1,username);
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                int cardID=rs.getInt(1);
+                pst=conn.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
+                pst.setString(1,"F");
+                pst.setInt(2,cardID);
+                pst.executeUpdate();
+            }
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't connect to database," +
+                    "so we can't choose a card..closing the app","Error",JOptionPane.WARNING_MESSAGE);
+            System.exit(1);
+        }
     }
 
     private void initComponents() {
-
+        panelCard1=new JPanel(new GridLayout(4,1));
+        panelCard1.setBackground(new Color(56,56,56));
+        panelCard2=new JPanel(new GridLayout(4,1));
+        panelCard2.setBackground(new Color(56,56,56));
+        panelCard3=new JPanel(new GridLayout(4,1));
+        panelCard3.setBackground(new Color(56,56,56));
         card1 = new JButton();
         card1.setBackground(new Color(56,56,56));
         card1.setIcon(new ImageIcon("/home/cipri/Downloads/card1s.png"));
@@ -58,70 +160,27 @@ public class ThreeCards extends JFrame {
         typeCard3.setForeground(new Color(255,255,255));
         focusLabel = new JLabel();
         SwingUtilities.invokeLater(focusLabel::requestFocus);
-        card1.setPreferredSize(new Dimension(200, 180));
-        card2.setPreferredSize(new Dimension(200, 180));
-        card3.setPreferredSize(new Dimension(200, 180));
+        card1.setSize(new Dimension(70, 150));
+        card2.setSize(new Dimension(70, 150));
+        card3.setSize(new Dimension(70, 150));
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(card1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bankCard1)
-                                        .addComponent(numberCard1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(card2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bankCard2)
-                                        .addComponent(numberCard2))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(numberCard3)
-                                        .addComponent(bankCard3)
-                                        .addComponent(card3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(88, 88, 88)
-                                .addComponent(typeCard1)
-                                .addGap(177, 177, 177)
-                                .addComponent(typeCard2)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(typeCard3)
-                                .addGap(93, 93, 93))
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(focusLabel))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(focusLabel)
-                                .addGap(24, 24, 24)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(card1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(card2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(card3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(bankCard1)
-                                        .addComponent(bankCard2)
-                                        .addComponent(bankCard3))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(typeCard1)
-                                        .addComponent(typeCard2)
-                                        .addComponent(typeCard3))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(numberCard1)
-                                        .addComponent(numberCard2)
-                                        .addComponent(numberCard3))
-                                .addContainerGap())
-        );
+        panelCard1.add(card1);
+        panelCard1.add(bankCard1);
+        panelCard1.add(typeCard1);
+        panelCard1.add(numberCard1);
 
-        pack();
+        panelCard2.add(card2);
+        panelCard2.add(bankCard2);
+        panelCard2.add(typeCard2);
+        panelCard2.add(numberCard2);
+
+        panelCard3.add(card3);
+        panelCard3.add(bankCard3);
+        panelCard3.add(typeCard3);
+        panelCard3.add(numberCard3);
+
+        display.add(panelCard1);
+        display.add(panelCard2);
+        display.add(panelCard3);
     }
 }

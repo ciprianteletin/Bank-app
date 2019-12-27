@@ -2,7 +2,6 @@ package com.scrapper;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;
-import org.jsoup.select.Elements;
 
 import javax.swing.*;
 import java.io.IOException;

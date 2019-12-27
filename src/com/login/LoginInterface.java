@@ -4,6 +4,8 @@ import com.automata.FiniteAutomata;
 import com.automata.State;
 import com.core.Application;
 import com.criptography.Decrypt;
+import com.selector.ThreeCards;
+import com.selector.TwoCards;
 
 import javax.swing.*;
 import java.awt.*;
@@ -230,13 +232,13 @@ public class LoginInterface {
                             if(cardNr==1)
                                 SwingUtilities.invokeLater(()->new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
                             else if(cardNr==2){
-                                //invoke two cards;
-                                //TODO
-
+                                frame.dispose();
+                                SwingUtilities.invokeLater(()->new TwoCards(user.getText()));
                             }
+
                             else{
-                                //invoke three cards;
-                                //TODO
+                                frame.dispose();
+                                SwingUtilities.invokeLater(()->new ThreeCards(user.getText()));
                             }
                         }
                         else{
