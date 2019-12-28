@@ -40,10 +40,62 @@ public class Settings extends JFrame {
         this.deleteAccountButton();
         this.addCardButton();
         this.changeButton();
+        this.changePasswordButton();
+        this.removeButton();
         SwingUtilities.invokeLater(label::requestFocus);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    private void removeButton(){
+        removeCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JOptionPane.showMessageDialog(null,"Select the card that you want to remove!",
+                        "Remove card",JOptionPane.WARNING_MESSAGE);
+                try {
+                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                    pst.setString(1,username);
+                    ResultSet rs=pst.executeQuery();
+                    int cardNr=0,ID=0;
+                    while(rs.next()){
+                        ++cardNr;
+                        ID=rs.getInt(1);
+                    }
+
+                    if(cardNr==1){
+                        pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
+                        pst.setInt(1,ID);
+                        pst.executeUpdate();
+
+                        pst=conn.prepareStatement("DELETE FROM financiar WHERE cardID=?");
+                        pst.setInt(1,ID);
+                        pst.executeUpdate();
+
+                        pst=conn.prepareStatement("DELETE FROM card_type WHERE cardID=?");
+                        pst.setInt(1,ID);
+                        pst.executeUpdate();
+
+                        pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
+                        pst.setInt(1,ID);
+                        pst.executeUpdate();
+
+                        //TODO delete account or ask;
+                    }else if(cardNr==2){
+                        SwingUtilities.invokeLater(()->new TwoCards(username,1));
+                    }else if(cardNr==3){
+                        SwingUtilities.invokeLater(()->new ThreeCards(username,1));
+                    }
+                    conn.close();
+                    Settings.this.dispose();
+                }catch (SQLException sql){
+                    JOptionPane.showMessageDialog(null,"Can't remove the card!",
+                            "Error",JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
     }
 
     private void backButton(){
@@ -69,6 +121,16 @@ public class Settings extends JFrame {
         });
     }
 
+    private void changePasswordButton(){
+        changePassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Settings.this.dispose();
+                SwingUtilities.invokeLater(()->new ChangePassword(username,which));
+            }
+        });
+    }
+
     private void changeButton(){
         changeCard.addActionListener(new ActionListener() {
             @Override
@@ -86,11 +148,11 @@ public class Settings extends JFrame {
                         JOptionPane.showMessageDialog(null,"You only have one card!",
                                 "One card",JOptionPane.WARNING_MESSAGE);
                     else if(cardNr==2){
-                        SwingUtilities.invokeLater(()->new TwoCards(username));
+                        SwingUtilities.invokeLater(()->new TwoCards(username,0));
                         Settings.this.dispose();
                     }
                     else{
-                        SwingUtilities.invokeLater(()->new ThreeCards(username));
+                        SwingUtilities.invokeLater(()->new ThreeCards(username,0));
                         Settings.this.dispose();
                     }
                 }catch (SQLException sql){

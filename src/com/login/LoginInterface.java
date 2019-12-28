@@ -227,18 +227,27 @@ public class LoginInterface {
                             int cardNr=0;
                             pt.setString(1,user.getText());
                             rs=pt.executeQuery();
-                            while(rs.next())
+                            int ID=0;
+                            while(rs.next()) {
                                 ++cardNr;
-                            if(cardNr==1)
-                                SwingUtilities.invokeLater(()->new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                                ID=rs.getInt(1);
+                            }
+                            if(cardNr==1) {
+                                //am stocat primul ID, il setez true(in caz de stergere card)
+                                pt=connection.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
+                                pt.setString(1,"T");
+                                pt.setInt(2,ID);
+                                pt.executeUpdate();
+                                SwingUtilities.invokeLater(() -> new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                            }
                             else if(cardNr==2){
                                 frame.dispose();
-                                SwingUtilities.invokeLater(()->new TwoCards(user.getText()));
+                                SwingUtilities.invokeLater(()->new TwoCards(user.getText(),0));
                             }
 
                             else{
                                 frame.dispose();
-                                SwingUtilities.invokeLater(()->new ThreeCards(user.getText()));
+                                SwingUtilities.invokeLater(()->new ThreeCards(user.getText(),0));
                             }
                         }
                         else{

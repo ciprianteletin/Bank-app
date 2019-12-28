@@ -2,6 +2,8 @@ package com.selector;
 
 import com.URL;
 import com.core.Application;
+import com.core.Settings;
+import com.login.LoginInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +23,11 @@ public class ThreeCards{
     private int ID1,ID2,ID3;
     private String username;
     private JPanel panelCard1,panelCard2,panelCard3;
+    private int selectOrRemove;
 
-    public ThreeCards(String username) {
+    public ThreeCards(String username,int selectOrRemove) {
         this.username=username;
+        this.selectOrRemove=selectOrRemove;
         display=new JFrame("Three cards");
         display.setLayout(new GridLayout(1,3));
         display.getContentPane().setBackground(new Color(56,56,56));
@@ -36,6 +40,66 @@ public class ThreeCards{
         configButtons();
         display.setResizable(false);
         display.setVisible(true);
+    }
+
+    private void removeCard(int ID){
+        try{
+            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            pst=conn.prepareStatement("DELETE FROM financiar WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            pst=conn.prepareStatement("DELETE FROM card_type WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            conn.close();
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't remove the card..going " +
+                    "back to settings","Remove card",JOptionPane.WARNING_MESSAGE);
+            display.dispose();
+            SwingUtilities.invokeLater(()->new Settings(1,username));
+        }
+    }
+
+    private void configButtons() {
+        card1.addActionListener((e) -> {
+            if (selectOrRemove == 0) {
+                makeID(ID1);
+                return;
+            }
+            removeCard(ID1);
+            display.dispose();
+            SwingUtilities.invokeLater(()->new LoginInterface().start());
+        });
+
+        card2.addActionListener((e) -> {
+            if(selectOrRemove == 0) {
+                makeID(ID2);
+                return;
+            }
+            removeCard(ID2);
+            display.dispose();
+            SwingUtilities.invokeLater(()->new LoginInterface().start());
+        });
+
+        card3.addActionListener((e)->{
+            if(selectOrRemove == 0) {
+                makeID(ID3);
+                return;
+            }
+            removeCard(ID3);
+            display.dispose();
+            SwingUtilities.invokeLater(()->new LoginInterface().start());
+        });
     }
 
     private void updateData(){
@@ -95,11 +159,6 @@ public class ThreeCards{
         }
     }
 
-    private void configButtons(){
-        card1.addActionListener((ae)->makeID(ID1));
-        card2.addActionListener((ae)->makeID(ID2));
-        card3.addActionListener((ae)->makeID(ID3));
-    }
 
     private void makeCardsF(){
         try{

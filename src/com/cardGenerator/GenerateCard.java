@@ -107,13 +107,14 @@ public abstract class GenerateCard {
             int cardID=set.getInt(1);
             //only one value, last inserted, so no need to call next multiple times;
 
-            pt=conn.prepareStatement("INSERT INTO card_type VALUES (?,?,?,?,?)");
+            pt=conn.prepareStatement("INSERT INTO card_type VALUES (?,?,?,?,?,?)");
 
             pt.setInt(1,cardID);
             pt.setString(2,banca.toString());
             pt.setString(3,tipCard.toString());
             pt.setString(4,banca.getCifru());
             pt.setString(5,current+"");
+            pt.setString(6,"A");
             pt.executeUpdate();
 
             //Preparing the data;

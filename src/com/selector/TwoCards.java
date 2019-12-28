@@ -2,6 +2,8 @@ package com.selector;
 
 import com.URL;
 import com.core.Application;
+import com.core.Settings;
+import com.login.LoginInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +16,11 @@ public class TwoCards extends JFrame {
     private JLabel focusLabel;
     private int ID1,ID2;
     private String username;
+    private int selectOrRemove;
 
-    public TwoCards(String username) {
+    public TwoCards(String username,int selectOrRemove) {
         this.username=username;
+        this.selectOrRemove=selectOrRemove;
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -45,10 +49,56 @@ public class TwoCards extends JFrame {
         }
     }
 
+    private void removeCard(int ID){
+        try{
+            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
 
-    private void configButtons(){
-        card1.addActionListener((ae)->makeID(ID1));
-        card2.addActionListener((ae)->makeID(ID2));
+            pst=conn.prepareStatement("DELETE FROM financiar WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            pst=conn.prepareStatement("DELETE FROM card_type WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
+            conn.close();
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't remove the card..going " +
+                    "back to settings","Remove card",JOptionPane.WARNING_MESSAGE);
+            TwoCards.this.dispose();
+            SwingUtilities.invokeLater(()->new Settings(1,username));
+        }
+
+    }
+
+
+    private void configButtons() {
+        card1.addActionListener((ae) -> {
+            if (selectOrRemove == 0) {
+                makeID(ID1);
+                return;
+            }
+            removeCard(ID1);
+            TwoCards.this.dispose();
+            SwingUtilities.invokeLater(()->new LoginInterface().start());
+        });
+
+        card2.addActionListener((ae) -> {
+            if(selectOrRemove == 0) {
+                makeID(ID2);
+                return;
+            }
+            removeCard(ID2);
+            TwoCards.this.dispose();
+            SwingUtilities.invokeLater(()->new LoginInterface().start());
+        });
     }
 
     private void makeCardsF(){
