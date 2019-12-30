@@ -5,6 +5,7 @@ import com.login.ChooseAccountInterface;
 import com.login.LoginInterface;
 import com.selector.ThreeCards;
 import com.selector.TwoCards;
+import com.card.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,12 +23,14 @@ public class Settings extends JFrame {
     private JLabel image, hello;
     private int which;
     private String username;
+    private Card card;
 
     public Settings(int which,String username) {
         this.username=username;
         this.which=which;
         this.setTitle("Settings");
         createImg();
+        createCard();
         initialize();
         JLabel label=new JLabel("");
         setDimension();
@@ -35,25 +38,67 @@ public class Settings extends JFrame {
         this.setColors();
         this.makeOrder();
         this.backButton();
-        this.mainButtons();
+        this.logoutButton();
         this.add(label);
         this.deleteAccountButton();
         this.addCardButton();
         this.changeButton();
         this.changePasswordButton();
         this.removeButton();
+        this.blockButton();
+        this.setBlockName();
         SwingUtilities.invokeLater(label::requestFocus);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
+    private void setBlockName(){
+        if(card!=null && card.isBlocked())
+            blockCard.setText("UnblockCard");
+        else
+            blockCard.setText("BlockCard");
+    }
+
+    private void createCard(){
+        try{
+            Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+            pst.setString(1,username);
+            ResultSet rs=pst.executeQuery();
+            if(rs.next())
+                card=new Card(username);
+            else
+                card=null;
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Card failed to be created","Card failed",JOptionPane.WARNING_MESSAGE);
+            System.exit(1);
+        }
+    }
+
+    private void blockButton(){
+        blockCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //TODO event for changing the name of the button
+                SwingUtilities.invokeLater(()->new BlockUnblock(username));
+                if(blockCard.getText().equals("BlockCard") && card!=null) {
+                    blockCard.setText("UnblockCard");
+                    card.setBlock("B");
+                }
+                else {
+                    if(card!=null)
+                        card.setBlock("A");
+                    blockCard.setText("BlockCard");
+                }
+            }
+        });
+    }
+
     private void removeButton(){
         removeCard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null,"Select the card that you want to remove!",
-                        "Remove card",JOptionPane.WARNING_MESSAGE);
                 try {
                     Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
                     PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
@@ -64,8 +109,10 @@ public class Settings extends JFrame {
                         ++cardNr;
                         ID=rs.getInt(1);
                     }
-
-                    if(cardNr==1){
+                    if(cardNr==0){
+                        JOptionPane.showMessageDialog(null,"You don't have a card!","No card",JOptionPane.WARNING_MESSAGE);
+                    }
+                    else if(cardNr==1){
                         pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
                         pst.setInt(1,ID);
                         pst.executeUpdate();
@@ -78,19 +125,57 @@ public class Settings extends JFrame {
                         pst.setInt(1,ID);
                         pst.executeUpdate();
 
+                        pst=conn.prepareStatement("DELETE FROM data_limit WHERE cardID=?");
+                        pst.setInt(1,ID);
+                        pst.executeUpdate();
+
                         pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
                         pst.setInt(1,ID);
                         pst.executeUpdate();
 
-                        //TODO delete account or ask;
+                        int result=JOptionPane.showConfirmDialog(null,"You have no card left! Do you want to delete your account?",
+                                "No cards remaining",JOptionPane.YES_NO_OPTION);
+                        if(result==JOptionPane.YES_OPTION){
+                            pst=conn.prepareStatement("DELETE FROM adress WHERE user=?");
+                            pst.setString(1,username);
+                            pst.executeUpdate();
+
+                            pst=conn.prepareStatement("DELETE FROM info WHERE user=?");
+                            pst.setString(1,username);
+                            pst.executeUpdate();
+
+                            pst=conn.prepareStatement("DELETE FROM passwords WHERE user=?");
+                            pst.setString(1,username);
+                            pst.executeUpdate();
+
+                            pst=conn.prepareStatement("DELETE FROM users WHERE user=?");
+                            pst.setString(1,username);
+                            pst.executeUpdate();
+                            card.closeConnection();
+                            Settings.this.dispose();
+                            //account deleted
+                            SwingUtilities.invokeLater(()->new LoginInterface().start());
+                        }else {
+                            //to make card null and to set buttons as needed
+                            Settings.this.dispose();
+                            SwingUtilities.invokeLater(() -> new Settings(which, username));
+                        }
                     }else if(cardNr==2){
+                        JOptionPane.showMessageDialog(null,"Select the card that you want to remove!",
+                                "Remove card",JOptionPane.INFORMATION_MESSAGE);
+                        Settings.this.dispose();
                         SwingUtilities.invokeLater(()->new TwoCards(username,1));
                     }else if(cardNr==3){
+                        JOptionPane.showMessageDialog(null,"Select the card that you want to remove!",
+                                "Remove card",JOptionPane.INFORMATION_MESSAGE);
+                        Settings.this.dispose();
                         SwingUtilities.invokeLater(()->new ThreeCards(username,1));
                     }
+                    pst=conn.prepareStatement("ALTER TABLE card_data AUTO_INCREMENT=1");
+                    pst.executeUpdate();
                     conn.close();
-                    Settings.this.dispose();
                 }catch (SQLException sql){
+                    sql.printStackTrace();
                     JOptionPane.showMessageDialog(null,"Can't remove the card!",
                             "Error",JOptionPane.WARNING_MESSAGE);
                 }
@@ -103,6 +188,8 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Settings.this.dispose();
+                if(card!=null)
+                    card.closeConnection();
                 if(which==0)
                     SwingUtilities.invokeLater(()->new Application(username));
                 else
@@ -111,11 +198,13 @@ public class Settings extends JFrame {
         });
     }
 
-    private void mainButtons(){
+    private void logoutButton(){
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Settings.this.dispose();
+                if(card!=null)
+                    card.closeConnection();
                 SwingUtilities.invokeLater(()->new LoginInterface().start());
             }
         });
@@ -126,6 +215,8 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Settings.this.dispose();
+                if(card!=null)
+                    card.closeConnection();
                 SwingUtilities.invokeLater(()->new ChangePassword(username,which));
             }
         });
@@ -144,15 +235,18 @@ public class Settings extends JFrame {
                     while(rs.next()){
                         ++cardNr;
                     }
-                    if(cardNr==1)
-                        JOptionPane.showMessageDialog(null,"You only have one card!",
-                                "One card",JOptionPane.WARNING_MESSAGE);
-                    else if(cardNr==2){
-                        SwingUtilities.invokeLater(()->new TwoCards(username,0));
+                    if (cardNr == 0) {
+                        JOptionPane.showMessageDialog(null,"No card left to change!","No cards",JOptionPane.WARNING_MESSAGE);
+                    } else if (cardNr == 1)
+                        JOptionPane.showMessageDialog(null, "You only have one card!",
+                                "One card", JOptionPane.WARNING_MESSAGE);
+                    else if (cardNr == 2) {
+                        SwingUtilities.invokeLater(() -> new TwoCards(username, 0));
+                        card.closeConnection();
                         Settings.this.dispose();
-                    }
-                    else{
-                        SwingUtilities.invokeLater(()->new ThreeCards(username,0));
+                    } else {
+                        SwingUtilities.invokeLater(() -> new ThreeCards(username, 0));
+                        card.closeConnection();
                         Settings.this.dispose();
                     }
                 }catch (SQLException sql){
@@ -202,6 +296,10 @@ public class Settings extends JFrame {
                             pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
                             pst.setInt(1,ID);
                             pst.executeUpdate();
+                            //data_limit
+                            pst=conn.prepareStatement("DELETE FROM data_limit WHERE cardID=?");
+                            pst.setInt(1,ID);
+                            pst.executeUpdate();
                             //finally,card_data
                             pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
                             pst.setInt(1,ID);
@@ -215,9 +313,11 @@ public class Settings extends JFrame {
                         //if I delete the last user, I want the cardID to stay at his position;
                         pst=conn.prepareStatement("ALTER TABLE card_data AUTO_INCREMENT=1");
                         pst.executeUpdate();
+                        conn.close();
+                        if(card!=null)
+                            card.closeConnection();
                         Settings.this.dispose(); //hmm, interesting, this is static
                         SwingUtilities.invokeLater(()->new LoginInterface().start());
-                        conn.close();
                     }catch (SQLException err){
                         JOptionPane.showConfirmDialog(null,"Can't connect to database.." +
                                 "abort this operation");
@@ -243,9 +343,14 @@ public class Settings extends JFrame {
                     int age=(int)ChronoUnit.YEARS.between(lc,current);
                     System.out.println(age);
                     String job=rs.getString(2);
-                    SwingUtilities.invokeLater(()->new ChooseAccountInterface(username,age,job));
-                    Settings.this.dispose();
+                    if(card!=null)
+                        SwingUtilities.invokeLater(()->new ChooseAccountInterface(username,age,job));
+                    else
+                        SwingUtilities.invokeLater(()->new ChooseAccountInterface(username,age,job,true));
                     conn.close();
+                    if(card!=null)
+                        card.closeConnection();
+                    Settings.this.dispose();
                 }catch (SQLException sql){
                     JOptionPane.showMessageDialog(null,"Can't connect to database.." +
                             "abort this operation..","Connection error",JOptionPane.WARNING_MESSAGE);

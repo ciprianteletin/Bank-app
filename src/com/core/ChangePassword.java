@@ -25,6 +25,7 @@ public class ChangePassword {
         display=new JFrame("Change password");
         display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         display.setLocationRelativeTo(null);
+        display.setResizable(false);
         display.getContentPane().setBackground(new Color(56,56,56));
         display.setVisible(true);
         display.setLayout(new BorderLayout());

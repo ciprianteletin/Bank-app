@@ -232,7 +232,10 @@ public class LoginInterface {
                                 ++cardNr;
                                 ID=rs.getInt(1);
                             }
-                            if(cardNr==1) {
+                            if(cardNr==0){
+                                SwingUtilities.invokeLater(() -> new Application(user.getText()));
+                            }
+                            else if(cardNr==1) {
                                 //am stocat primul ID, il setez true(in caz de stergere card)
                                 pt=connection.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
                                 pt.setString(1,"T");

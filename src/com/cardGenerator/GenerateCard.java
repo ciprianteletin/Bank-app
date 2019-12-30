@@ -1,10 +1,10 @@
 package com.cardGenerator;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Random;
 
 import com.URL;
-import com.Utilizator.Card;
 
 //TODO, dar ne trebuie mai intai clasa card aici, ca sa pot adauga ce e nevoie
 //LA SIGN UP si ADD CARD, generam card de aici;
@@ -107,7 +107,7 @@ public abstract class GenerateCard {
             int cardID=set.getInt(1);
             //only one value, last inserted, so no need to call next multiple times;
 
-            pt=conn.prepareStatement("INSERT INTO card_type VALUES (?,?,?,?,?,?)");
+            pt=conn.prepareStatement("INSERT INTO card_type VALUES (?,?,?,?,?,?,?)");
 
             pt.setInt(1,cardID);
             pt.setString(2,banca.toString());
@@ -115,6 +115,7 @@ public abstract class GenerateCard {
             pt.setString(4,banca.getCifru());
             pt.setString(5,current+"");
             pt.setString(6,"A");
+            pt.setString(7,"F");
             pt.executeUpdate();
 
             //Preparing the data;
@@ -141,6 +142,12 @@ public abstract class GenerateCard {
             pt.setDouble(10,dobanda);
             pt.executeUpdate();
 
+            int zi= LocalDate.now().getDayOfMonth();
+            pt=conn.prepareStatement("INSERT INTO data_limit VALUES (?,?,?)");
+            pt.setInt(1,cardID);
+            pt.setDouble(2,limita);
+            pt.setInt(3,zi);
+            pt.executeUpdate();
             conn.close();
 
         }catch (SQLException err){

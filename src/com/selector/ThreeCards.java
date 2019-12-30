@@ -57,6 +57,10 @@ public class ThreeCards{
             pst.setInt(1,ID);
             pst.executeUpdate();
 
+            pst=conn.prepareStatement("DELETE FROM data_limit WHERE cardID=?");
+            pst.setInt(1,ID);
+            pst.executeUpdate();
+
             pst=conn.prepareStatement("DELETE FROM card_data WHERE cardID=?");
             pst.setInt(1,ID);
             pst.executeUpdate();
@@ -75,30 +79,36 @@ public class ThreeCards{
             if (selectOrRemove == 0) {
                 makeID(ID1);
                 return;
+            }else if(selectOrRemove == 1) {
+                removeCard(ID1);
+                display.dispose();
+                SwingUtilities.invokeLater(() -> new LoginInterface().start());
+                return;
             }
-            removeCard(ID1);
-            display.dispose();
-            SwingUtilities.invokeLater(()->new LoginInterface().start());
         });
 
         card2.addActionListener((e) -> {
             if(selectOrRemove == 0) {
                 makeID(ID2);
                 return;
+            }else if(selectOrRemove == 1) {
+                removeCard(ID2);
+                display.dispose();
+                SwingUtilities.invokeLater(() -> new LoginInterface().start());
+                return;
             }
-            removeCard(ID2);
-            display.dispose();
-            SwingUtilities.invokeLater(()->new LoginInterface().start());
         });
 
         card3.addActionListener((e)->{
             if(selectOrRemove == 0) {
                 makeID(ID3);
                 return;
+            }else if(selectOrRemove == 1) {
+                removeCard(ID3);
+                display.dispose();
+                SwingUtilities.invokeLater(() -> new LoginInterface().start());
+                return;
             }
-            removeCard(ID3);
-            display.dispose();
-            SwingUtilities.invokeLater(()->new LoginInterface().start());
         });
     }
 

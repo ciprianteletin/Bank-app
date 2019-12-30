@@ -34,9 +34,11 @@ public class ChooseAccountInterface {
     private String username;
     private int age;
     private String job;
+    private boolean noCards;
 
     public ChooseAccountInterface(String username,int age,String job){
         this.username=username;
+        this.noCards=false;
         this.age=age;
         this.job=job;
         account=new JFrame("Add card");
@@ -58,6 +60,11 @@ public class ChooseAccountInterface {
         account.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         account.setVisible(true);
     }
+
+    public ChooseAccountInterface(String username,int age,String job,boolean noCards){
+        this(username,age,job);
+        this.noCards=noCards;
+    }
     /**
     If user presses exit on this interface, I will delete all the new records data that has no correspondent;
      Correspondent means that it has no card registered;
@@ -71,7 +78,7 @@ public class ChooseAccountInterface {
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();
                     //in case of having already an account and want to add another card on it;
-                    if(!rs.next()) {
+                    if(!rs.next() && !noCards) {
                         pst = connection.prepareStatement("DELETE FROM adress WHERE user=?");
                         pst.setString(1, username);
                         pst.executeUpdate();

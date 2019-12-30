@@ -1,9 +1,13 @@
 package com.core;
 
+import com.URL;
+import com.card.Card;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class Application extends JFrame{
     /**
@@ -16,9 +20,11 @@ public class Application extends JFrame{
     private JLabel hello, currentFocus, image;
     private JPanel page1;
     private String username;
+    private Card card;
 
     public Application(String username) {
             this.username=username;
+            createCard();
             this.setTitle("Main");
             initFirstPage();
             this.setLocationRelativeTo(null);
@@ -29,7 +35,35 @@ public class Application extends JFrame{
             this.setResizable(false);
             setVisible(true);
             makeButtons();
+            disableButtons();
         }
+
+        private void disableButtons(){
+            if(card == null || card.isBlocked()){
+                plataFactura.setEnabled(false);
+                plataOnline.setEnabled(false);
+                transfer.setEnabled(false);
+                transferPersonal.setEnabled(false);
+                conversie.setEnabled(false);
+            }
+        }
+
+        private void createCard(){
+            try{
+                Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                pst.setString(1,username);
+                ResultSet rs=pst.executeQuery();
+                if(rs.next())
+                    card=new Card(username);
+                else
+                    card=null;
+            }catch (SQLException sql){
+                JOptionPane.showMessageDialog(null,"Card failed to be created","Card failed",JOptionPane.WARNING_MESSAGE);
+                System.exit(1);
+            }
+        }
+
         private void focusOn(){
             SwingUtilities.invokeLater(currentFocus::requestFocus);
         }
@@ -39,6 +73,8 @@ public class Application extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     Application.super.dispose();
+                    if(card!=null)
+                        card.closeConnection();
                     SwingUtilities.invokeLater(()->new Settings(0,username));
                 }
             });
@@ -49,6 +85,8 @@ public class Application extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                         Application.super.dispose();
+                        if(card!=null)
+                            card.closeConnection();
                         SwingUtilities.invokeLater(()->new SecondApplication(username));
                     }
             });

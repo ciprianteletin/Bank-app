@@ -1,9 +1,13 @@
 package com.core;
 
+import com.URL;
+import com.card.Card;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class SecondApplication extends JFrame {
     /**
@@ -15,9 +19,11 @@ public class SecondApplication extends JFrame {
     private JButton switchPage,settings;
     private JLabel hello,image,currentFocus;
     private String username;
+    private Card card;
 
     public SecondApplication(String username){
         this.username=username;
+        createCard();
         this.setTitle("Main");
         initSecondPage();
         this.setLocationRelativeTo(null);
@@ -29,6 +35,32 @@ public class SecondApplication extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.makeButtons();
+        this.disableButtons();
+    }
+
+    private void disableButtons(){
+        if(card==null || card.isBlocked()){
+            IBAN.setEnabled(false);
+            istoricTranzactii.setEnabled(false);
+            searchTransaction.setEnabled(false);
+            soldCurent.setEnabled(false);
+        }
+    }
+
+    private void createCard(){
+        try{
+            Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+            pst.setString(1,username);
+            ResultSet rs=pst.executeQuery();
+            if(rs.next())
+                card=new Card(username);
+            else
+                card=null;
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Card failed to be created","Card failed",JOptionPane.WARNING_MESSAGE);
+            System.exit(1);
+        }
     }
 
     private void focusOn(){
@@ -40,6 +72,8 @@ public class SecondApplication extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SecondApplication.this.dispose();
+                if(card!=null)
+                    card.closeConnection();
                 SwingUtilities.invokeLater(()->new Settings(1,username));
             }
         });
@@ -50,6 +84,8 @@ public class SecondApplication extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SecondApplication.super.dispose();
+                if(card!=null)
+                    card.closeConnection();
                 SwingUtilities.invokeLater(()->new Application(username));
             }
         });
