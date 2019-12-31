@@ -95,11 +95,12 @@ public class ChooseAccountInterface {
                         pst.setString(1, username);
                         pst.executeUpdate();
                     }
+                    if(noCards)
+                        SwingUtilities.invokeLater(()->new Settings(1,username));
                     connection.close();
-
                 }catch (SQLException err){
                     err.printStackTrace();
-                    System.out.println("Connexion failed...Closing the app");
+                    JOptionPane.showMessageDialog(null,"Connexion failed...Closing the app");
                     System.exit(1);
                 }
             }

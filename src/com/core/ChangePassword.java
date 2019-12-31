@@ -23,17 +23,27 @@ public class ChangePassword {
         this.username=username;
         this.which=which;
         display=new JFrame("Change password");
-        display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         display.setLocationRelativeTo(null);
         display.setResizable(false);
+        display.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         display.getContentPane().setBackground(new Color(56,56,56));
         display.setVisible(true);
         display.setLayout(new BorderLayout());
         display.setSize(new Dimension(500,180));
         createComponents();
         addKeyListener();
+        addCloseOperation();
         cancelButton();
         confirmButton();
+    }
+
+    private void addCloseOperation(){
+        display.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                SwingUtilities.invokeLater(()->new Settings(which,username));
+            }
+        });
     }
 
     private void addKeyListener(){

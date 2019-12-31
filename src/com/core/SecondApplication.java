@@ -2,6 +2,7 @@ package com.core;
 
 import com.URL;
 import com.card.Card;
+import com.card.SoldCard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,6 +104,13 @@ public class SecondApplication extends JFrame {
                 JOptionPane.showMessageDialog(null,"Press print button if you want" +
                         " your info into a PDF","IBAN display",JOptionPane.DEFAULT_OPTION);
                 SwingUtilities.invokeLater(()->new IbanDisplay(username));
+            }
+        });
+
+        soldCurent.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                SwingUtilities.invokeLater(()->new SoldCard(card));
             }
         });
     }

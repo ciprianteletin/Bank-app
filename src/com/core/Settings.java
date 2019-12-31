@@ -81,16 +81,18 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //TODO event for changing the name of the button
-                SwingUtilities.invokeLater(()->new BlockUnblock(username));
-                if(blockCard.getText().equals("BlockCard") && card!=null) {
-                    blockCard.setText("UnblockCard");
-                    card.setBlock("B");
-                }
-                else {
-                    if(card!=null)
-                        card.setBlock("A");
-                    blockCard.setText("BlockCard");
-                }
+                Settings.this.setEnabled(false);
+                SwingUtilities.invokeLater(()->new BlockUnblock(username,()->Settings.this.setEnabled(true),()->{
+                    if(blockCard.getText().equals("BlockCard") && card!=null) {
+                        blockCard.setText("UnblockCard");
+                        card.setBlock("B");
+                    }
+                    else {
+                        if(card!=null)
+                            card.setBlock("A");
+                        blockCard.setText("BlockCard");
+                    }
+                }));
             }
         });
     }
@@ -341,7 +343,6 @@ public class Settings extends JFrame {
                     LocalDate lc=dt.toLocalDate();
                     LocalDate current=LocalDate.now();
                     int age=(int)ChronoUnit.YEARS.between(lc,current);
-                    System.out.println(age);
                     String job=rs.getString(2);
                     if(card!=null)
                         SwingUtilities.invokeLater(()->new ChooseAccountInterface(username,age,job));

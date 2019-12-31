@@ -15,8 +15,12 @@ public class BlockUnblock{
     private JLabel focus;
     private  JPasswordField password;
     private String username;
+    private Enable enable;
+    private ChangeNameEvent change;
 
-    public BlockUnblock(String username){
+    public BlockUnblock(String username,Enable e,ChangeNameEvent c){
+        this.enable=e;
+        this.change=c;
         this.username=username;
         display=new JFrame("CheckPassword");
         display.getContentPane().setBackground(new Color(56,56,56));
@@ -27,6 +31,7 @@ public class BlockUnblock{
         display.setVisible(true);
         initComponents();
         addListener();
+        addClose();
         confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -58,6 +63,7 @@ public class BlockUnblock{
                         conn.close();
                         return;
                     }
+
                     pst=conn.prepareStatement("SELECT cd.cardID,blocked FROM card_data cd INNER JOIN card_type ct ON cd.cardID = ct.cardID " +
                             "WHERE user=? AND current=?");
                     pst.setString(1,username);
@@ -73,18 +79,30 @@ public class BlockUnblock{
                             pst.setString(1, "A");
                         pst.setInt(2, ID);
                         pst.executeUpdate();
+                        change.changeEvent();
                     }else{
                         JOptionPane.showMessageDialog(null,"No card registered!","No card!",JOptionPane.WARNING_MESSAGE);
                     }
                     conn.close();
                     display.dispose();
+                    enable.enable();
                 }catch (SQLException sql){
                     sql.printStackTrace();
                     JOptionPane.showMessageDialog(null,"Can't connect to database...closing " +
                             "the operation","Error",JOptionPane.WARNING_MESSAGE);
+                    enable.enable();
                     display.dispose();
                 }
 
+            }
+        });
+    }
+
+    private void addClose(){
+        display.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                enable.enable();
             }
         });
     }
