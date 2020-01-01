@@ -99,6 +99,24 @@ public class Application extends JFrame{
                     SwingUtilities.invokeLater(CursValutarButton::new);
                 }
             });
+
+            conversie.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    Application.this.setEnabled(false);
+                    SwingUtilities.invokeLater(()->new SchimbaCurs(card,()->Application.this.setEnabled(true)));
+                }
+            });
+
+            plataFactura.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    JOptionPane.showMessageDialog(null,"Introduceti suma in lei, indiferent de tipul monedei de pe card\n" +
+                            "Nu se vor percepe comisioane referitoare la convertirea sumei de plata");
+                    Application.this.setEnabled(false);
+                    SwingUtilities.invokeLater(()->new Facturi(card,()->Application.this.setEnabled(true)));
+                }
+            });
         }
 
         private void setImage(){

@@ -18,12 +18,16 @@ public enum Currency {
         vanzare = Math.round((valoare + 0.2) * 100) / 100.0;
     }
 
-    public double convertInLei(double suma){
-        return suma/cumparare;
+    public double convertDinLei(double suma){
+        return Math.round((suma/vanzare)*100)/100.0;
     }
 
-    public double convertDinLei(double suma){
-        return suma*vanzare;
+    public double convertInLei(double suma){
+        return Math.round((suma*cumparare)*100)/100.0;
+    }
+
+    public double convertBetween(double suma){
+        return Math.round((suma*vanzare)*100)/100.0;
     }
 
     public double getCumparare(){

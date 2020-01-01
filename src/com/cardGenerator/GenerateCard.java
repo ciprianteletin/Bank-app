@@ -6,7 +6,6 @@ import java.util.Random;
 
 import com.URL;
 
-//TODO, dar ne trebuie mai intai clasa card aici, ca sa pot adauga ce e nevoie
 //LA SIGN UP si ADD CARD, generam card de aici;
 public abstract class GenerateCard {
     //method to generate cards; the first one will keep the salary in it, and of course here will be the main wealth of the user;
@@ -45,16 +44,29 @@ public abstract class GenerateCard {
         String moneda="Lei";
         limita=Math.round((banca.getLimita()+tipCard.getLimita())*100)/100.0;
         if(tipCard==TipCard.Calator) {
-            limita=Math.round(Currency.EURO.convertInLei(limita)*100)/100.0;
+            limita=Math.round(Currency.EURO.convertDinLei(limita)*100)/100.0;
             moneda = "Euro";
         }else if(tipCard==TipCard.Depozit){
             limita=-1;
+        }
+        boolean sumCard=true;
+        try{
+            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=conn.prepareStatement("SELECT cd.cardID,venit_lunar FROM card_data cd INNER JOIN financiar f ON cd.cardID=f.cardID " +
+                    "WHERE user=? AND venit_lunar>0");
+            pst.setString(1,user);
+            ResultSet rs=pst.executeQuery();
+            if(!rs.next())
+                sumCard=false;
+            conn.close();
+        }catch (SQLException sql){
+            //
         }
 
         //for the salary and sum I will consider the age of the person; first, I will check if he is student or unemployed or under 26
         double salary=0.0,sum;
         int salaryDate=-1;
-        if(cardNumber==1) {
+        if(cardNumber==1 || !sumCard) {
             salaryDate = r.nextInt(20) + 1;
             if (underStudent || unemployed) {
                 sum = (Math.round(r.nextDouble()*100) / 100.0 + 0.4) * 1500.0; //Student or unemployed, so he has a hard life with money :))
@@ -82,7 +94,7 @@ public abstract class GenerateCard {
             }
         }
         if(moneda.equals("Euro")){
-            sum=Currency.EURO.convertInLei(sum);
+            sum=Currency.EURO.convertDinLei(sum);
         }
         /*I didn't change the comm based on monetary type, because the sum is greater in Lei that in other monetary types,
         so when I apply a comm, I will apply a lower one(because the payed products or taxes will be converted too;

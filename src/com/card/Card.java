@@ -49,13 +49,14 @@ public class Card {
             rs=pst.executeQuery();
             rs.next();
             String virat=rs.getString(1);
-            if(data==zi && virat.equals("F")){
-                setSuma(getSuma()+venit);
+            if(data<=zi && virat.equals("F")){
+                double dob=Math.round(((dobanda*venit)/100)*100)/100.0;
+                setSuma(getSuma()+venit+dob);
                 pst=conn.prepareStatement("UPDATE card_type SET virat=? WHERE cardID=?");
                 pst.setString(1,"T");
                 pst.setInt(2,ID);
                 pst.executeUpdate();
-            }else if(data!=zi){
+            }else if(data>zi && virat.equals("T")){
                 pst=conn.prepareStatement("UPDATE card_type SET virat=? WHERE cardID=?");
                 pst.setString(1,"F");
                 pst.setInt(2,ID);
@@ -143,6 +144,7 @@ public class Card {
             pst.setDouble(1,getSuma());
             pst.setDouble(2,getLim_transfer());
             pst.setString(3,getMoneda());
+            pst.setInt(4,ID);
             pst.executeUpdate();
         }catch (SQLException err){
             //
@@ -210,6 +212,8 @@ public class Card {
     public void setBlock(String block){
         this.block=block;
     }
+
+    public int getID(){return this.ID;}
 
     public void closeConnection(){
         try{

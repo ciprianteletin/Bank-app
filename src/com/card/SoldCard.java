@@ -39,7 +39,7 @@ public class SoldCard {
         JLabel monedas=new JLabel();
         monedas.setForeground(new Color(0,255,0));
         monedas.setText(card.getMoneda());
-        JLabel limita=new JLabel("Limita transfer: ");
+        JLabel limita=new JLabel("Limita operatii: ");
         limita.setForeground(new Color(255,255,255));
         JLabel limitas=new JLabel();
         limitas.setForeground(new Color(0,255,0));
