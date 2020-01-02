@@ -1,6 +1,7 @@
 package com.card;
 
 import com.URL;
+import com.cardGenerator.Currency;
 
 import javax.swing.*;
 import java.sql.*;
@@ -42,6 +43,10 @@ public class Card {
             rs.next();
             int data=rs.getInt(1);
             double venit=Math.round(rs.getDouble(2)*100)/100.0;
+            if(!moneda.equals("Lei")){
+                Currency currency=Currency.valueOf(moneda.toUpperCase());
+                venit=currency.convertDinLei(venit); //adun salariul la valuta curenta;
+            }
             int zi= LocalDate.now().getDayOfMonth();
 
             pst=conn.prepareStatement("SELECT virat FROM card_type WHERE cardID=?");
@@ -52,9 +57,19 @@ public class Card {
             if(data<=zi && virat.equals("F")){
                 double dob=Math.round(((dobanda*venit)/100)*100)/100.0;
                 setSuma(getSuma()+venit+dob);
+                updateDB();
                 pst=conn.prepareStatement("UPDATE card_type SET virat=? WHERE cardID=?");
                 pst.setString(1,"T");
                 pst.setInt(2,ID);
+                pst.executeUpdate();
+
+                pst=conn.prepareStatement("INSERT INTO tranzactii VALUES (?,?,?,?,?)");
+                pst.setInt(1,ID);
+                pst.setString(2,"Salar");
+                pst.setDouble(3,venit);
+                pst.setString(4,moneda);
+                pst.setDate(5,Date.valueOf(LocalDate.now()));
+
                 pst.executeUpdate();
             }else if(data>zi && virat.equals("T")){
                 pst=conn.prepareStatement("UPDATE card_type SET virat=? WHERE cardID=?");
@@ -77,6 +92,11 @@ public class Card {
             ResultSet rs=pst.executeQuery();
             rs.next();
             double limita=Math.round(rs.getDouble(1)*100)/100.0;
+            if(!moneda.equals("Lei")){
+                Currency currency=Currency.valueOf(moneda.toUpperCase());
+                limita=currency.convertDinLei(limita);
+                //convert the current limit to the actual card currency;
+            }
             int day=rs.getInt(2);
             int zi=LocalDate.now().getDayOfMonth();
             if(day!=zi){
@@ -85,6 +105,7 @@ public class Card {
                 pst.setInt(1,zi);
                 pst.setInt(2,ID);
                 pst.executeUpdate();
+                updateDB();
             }
         }catch (SQLException sql){
             sql.printStackTrace();

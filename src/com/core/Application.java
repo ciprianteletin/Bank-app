@@ -117,6 +117,17 @@ public class Application extends JFrame{
                     SwingUtilities.invokeLater(()->new Facturi(card,()->Application.this.setEnabled(true)));
                 }
             });
+
+            plataOnline.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    JOptionPane.showMessageDialog(null,"Suma introdusa trebuie sa fie in lei.\n" +
+                            "Sunt acceptate doar urmatoarele site-uri:\n" +
+                            "Emag,PCGarage si Cel.ro");
+                    Application.this.setEnabled(false);
+                    SwingUtilities.invokeLater(()->new Online(card,()->Application.this.setEnabled(true)));
+                }
+            });
         }
 
         private void setImage(){

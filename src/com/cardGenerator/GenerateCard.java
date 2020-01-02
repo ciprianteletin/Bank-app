@@ -40,9 +40,10 @@ public abstract class GenerateCard {
             tipCard = TipCard.values()[tip];
         }
 
-        double limita;
+        double limita,limitaRo;
         String moneda="Lei";
         limita=Math.round((banca.getLimita()+tipCard.getLimita())*100)/100.0;
+        limitaRo=limita;
         if(tipCard==TipCard.Calator) {
             limita=Math.round(Currency.EURO.convertDinLei(limita)*100)/100.0;
             moneda = "Euro";
@@ -63,7 +64,7 @@ public abstract class GenerateCard {
             //
         }
 
-        //for the salary and sum I will consider the age of the person; first, I will check if he is student or unemployed or under 26
+        //for the salary and sum I will consider the age of the person; first, I will check if he/she is a student or unemployed or under 26
         double salary=0.0,sum;
         int salaryDate=-1;
         if(cardNumber==1 || !sumCard) {
@@ -93,6 +94,7 @@ public abstract class GenerateCard {
                 sum = (Math.round(r.nextDouble() * 100) / 100.0 + 0.6) * 1950.0;
             }
         }
+        //salary remains in lei
         if(moneda.equals("Euro")){
             sum=Currency.EURO.convertDinLei(sum);
         }
@@ -157,7 +159,7 @@ public abstract class GenerateCard {
             int zi= LocalDate.now().getDayOfMonth();
             pt=conn.prepareStatement("INSERT INTO data_limit VALUES (?,?,?)");
             pt.setInt(1,cardID);
-            pt.setDouble(2,limita);
+            pt.setDouble(2,limitaRo); //I want that the limit to be in Lei, constant value;
             pt.setInt(3,zi);
             pt.executeUpdate();
             conn.close();

@@ -113,6 +113,22 @@ public class SecondApplication extends JFrame {
                 SwingUtilities.invokeLater(()->new SoldCard(card));
             }
         });
+
+        istoricTranzactii.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                SecondApplication.this.setEnabled(false);
+                SwingUtilities.invokeLater(()->new IstoricTranzactii(card,()->SecondApplication.this.setEnabled(true)));
+            }
+        });
+
+        searchTransaction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                SecondApplication.this.setEnabled(false);
+                SwingUtilities.invokeLater(()->new Search(card,()->SecondApplication.this.setEnabled(true)));
+            }
+        });
     }
 
     private void initSecondPage(){

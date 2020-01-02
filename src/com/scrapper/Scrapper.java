@@ -26,4 +26,16 @@ public abstract class Scrapper {
     }
 
     public abstract void scrape();
+
+    public String getProductName(){
+        return productName;
+    }
+
+    public int getPret(){
+        return prc;
+    }
+
+    public String getMoneda(){
+        return valueType;
+    }
 }

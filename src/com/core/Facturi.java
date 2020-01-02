@@ -52,45 +52,48 @@ class Facturi {
         pay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                double pre=Math.round(Double.parseDouble(pret.getText())*100)/100.0;
-                if(!card.getMoneda().equals("Lei")){
-                    Currency currency=Currency.valueOf(card.getMoneda().toUpperCase());
-                    pre=currency.convertDinLei(pre);
-                }
+                if(!furnizor.getText().isEmpty() && (!pret.getText().isEmpty() && pret.getForeground().equals(new Color(56,56,56)))) {
+                    double pre = Math.round(Double.parseDouble(pret.getText()) * 100) / 100.0;
+                    double comm = Math.round(pre * card.getCom_factura()) / 100.0;
+                    if (!card.getMoneda().equals("Lei")) {
+                        Currency currency = Currency.valueOf(card.getMoneda().toUpperCase());
+                        pre = currency.convertDinLei(pre);
+                    }
+                    //verificare suma comparativ cu pretul si comisionul aplicat;
+                    if (pre+comm > card.getSuma()) {
+                        JOptionPane.showMessageDialog(null, "Nu exista suficienti bani pe card!\nSuma curenta: " + card.getSuma(),
+                                "Suma insuficienta", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
 
-                if(pre>card.getSuma()){
-                    JOptionPane.showMessageDialog(null,"Nu exista suficienti bani pe card!\nSuma curenta: "+card.getSuma(),
-                            "Suma insuficienta",JOptionPane.WARNING_MESSAGE);
-                    return;
+                    if (pre+comm > card.getLim_transfer() && card.getLim_transfer() != -1) {
+                        JOptionPane.showMessageDialog(null, "Ati depasit limita admisa de plati!\nLimita curenta: " + card.getLim_transfer(),
+                                "Limita atinsa", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    enable.enable();
+                    try {
+                        Connection conn = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                        PreparedStatement pst = conn.prepareStatement("INSERT INTO tranzactii VALUES (?,?,?,?,?)");
+                        pst.setInt(1, card.getID());
+                        pst.setString(2, "Factura "+furnizor.getText());
+                        pst.setDouble(3, pre);
+                        pst.setString(4, card.getMoneda());
+                        Date date = Date.valueOf(LocalDate.now());
+                        pst.setDate(5, date);
+                        pst.executeUpdate();
+                    } catch (SQLException sql) {
+                        JOptionPane.showMessageDialog(null, "Esuare tranzactie!", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                    //aplicare comision
+                    card.setSuma(card.getSuma() - pre - comm);
+                    if (card.getLim_transfer() != -1)
+                        card.setLim_transfer(card.getLim_transfer() - pre);
+                    card.updateDB();
+                    display.dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null,"You can't have empty fields!","Empty fields",JOptionPane.WARNING_MESSAGE);
                 }
-
-                if(pre>card.getLim_transfer() && card.getLim_transfer()!=-1){
-                    JOptionPane.showMessageDialog(null,"Ati depasit limita admisa de plati!\nLimita curenta: "+card.getLim_transfer(),
-                            "Limita atinsa",JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                enable.enable();
-                try{
-                    Connection conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
-                    PreparedStatement pst=conn.prepareStatement("INSERT INTO tranzactii VALUES (?,?,?,?,?,?)");
-                    pst.setInt(1,card.getID());
-                    pst.setString(2,furnizor.getText());
-                    pst.setDouble(3,pre);
-                    pst.setString(4,card.getMoneda());
-                    pst.setInt(5,1);
-                    Date date=Date.valueOf(LocalDate.now());
-                    pst.setDate(6,date);
-                    pst.executeUpdate();
-                }catch (SQLException sql){
-                    JOptionPane.showMessageDialog(null,"Esuare tranzactie!","Error",JOptionPane.WARNING_MESSAGE);
-                }
-                double comm=Math.round(((pre*card.getCom_factura())/100)*100)/100.0;
-                //aplicare comision
-                card.setSuma(card.getSuma()-pre-comm);
-                if(card.getLim_transfer()!=-1)
-                    card.setLim_transfer(card.getLim_transfer()-pre);
-                card.updateDB();
-                display.dispose();
             }
         });
     }

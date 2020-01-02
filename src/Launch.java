@@ -2,6 +2,8 @@ import com.cardGenerator.Currency;
 import com.core.CursValutarButton;
 import com.login.LoginInterface;
 import com.scrapper.CursValutar;
+import com.scrapper.Emag;
+
 import javax.swing.*;
 
 /**
