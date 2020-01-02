@@ -128,6 +128,30 @@ public class Application extends JFrame{
                     SwingUtilities.invokeLater(()->new Online(card,()->Application.this.setEnabled(true)));
                 }
             });
+
+            transferPersonal.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    try{
+                        Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                        pst.setString(1,username);
+                        ResultSet rs=pst.executeQuery();
+                        int nr=0;
+                        while (rs.next())
+                            ++nr;
+                        if(nr==1)
+                            JOptionPane.showMessageDialog(null,"You have only one card!");
+                        else {
+                            JOptionPane.showMessageDialog(null,"Insert the amount you want to transfer in Lei");
+                            Application.this.setEnabled(false);
+                            SwingUtilities.invokeLater(() -> new TransferPersonal(card, () -> Application.this.setEnabled(true),username));
+                        }
+                    }catch (SQLException sql){
+                        JOptionPane.showMessageDialog(null,"Can't transfer data..","Error",JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
         }
 
         private void setImage(){

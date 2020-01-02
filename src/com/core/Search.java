@@ -63,6 +63,11 @@ public class Search {
             public void windowClosing(WindowEvent e) {
                 enable.enable();
                 scroll.getFrame().dispose();
+                try {
+                    conn.close();
+                }catch (SQLException sql){
+                    //Nothing
+                }
             }
         });
     }

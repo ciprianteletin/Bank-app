@@ -30,6 +30,10 @@ public enum Currency {
         return Math.round((suma*vanzare)*100)/100.0;
     }
 
+    public double forTransfer(double suma){
+        return Math.round((suma/cumparare)*100)/100.0;
+    }
+
     public double getCumparare(){
         return this.cumparare;
     }
