@@ -232,9 +232,10 @@ public class Search {
                     int p2=Integer.parseInt(prices[1]);
                     try{
                         PreparedStatement pst=conn.prepareStatement("SELECT name,price,moneda,buy_date FROM tranzactii " +
-                                "WHERE price BETWEEN ? AND ?");
-                        pst.setInt(1,p1);
-                        pst.setInt(2,p2);
+                                "WHERE cardID=? AND price BETWEEN ? AND ?");
+                        pst.setInt(1,card.getID());
+                        pst.setInt(2,p1);
+                        pst.setInt(3,p2);
 
                         boolean inf=false;
                         ResultSet rs=pst.executeQuery();
@@ -274,8 +275,9 @@ public class Search {
                     java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
                     try{
                         PreparedStatement pst=conn.prepareStatement("SELECT name,price,moneda,buy_date FROM tranzactii " +
-                                "WHERE buy_date=?");
+                                "WHERE buy_date=? AND cardID=?");
                         pst.setDate(1,sqlDate);
+                        pst.setInt(2,card.getID());
                         boolean inf=false;
                         ResultSet rs=pst.executeQuery();
                         JTextArea text=scroll.getTextArea();

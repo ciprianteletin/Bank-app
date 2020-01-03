@@ -648,7 +648,6 @@ class SingUpInterface{
                             int year=convertToAge(); //age of the user;
                             JOptionPane.showConfirmDialog(null,"You will be redirect to the next step!",
                                     "Success!",JOptionPane.DEFAULT_OPTION);
-                            JOptionPane.showConfirmDialog(null,"TODO","TODO",JOptionPane.DEFAULT_OPTION);
                             singUpFrame.dispose();
                             SwingUtilities.invokeLater(new Runnable() {
                                 @Override
@@ -950,6 +949,4 @@ class SingUpInterface{
             return automate.validateData();
         }
     }
-
-    //TODO database entry and verify if data exists already
 }

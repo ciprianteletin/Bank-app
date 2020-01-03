@@ -2,6 +2,7 @@ package com.login;
 import com.URL;
 import com.automata.FiniteAutomata;
 import com.automata.State;
+import com.card.Card;
 import com.core.Application;
 import com.criptography.Decrypt;
 import com.selector.ThreeCards;
@@ -223,25 +224,40 @@ public class LoginInterface {
                             frame.dispose(); //inchide frame-ul si toate procesele asociate acestuia
                             //daca sunt egale parolele, atunci verificam numarul de carduri din cont si il lasam sa aleaga cardul dorit;
                             //daca are unul singur, intram pe unicul card;
-                            pt=connection.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
+                            pt=connection.prepareStatement("SELECT cardID,expire_date FROM card_data WHERE user=?");
                             int cardNr=0;
                             pt.setString(1,user.getText());
                             rs=pt.executeQuery();
                             int ID=0;
+                            String date=null;
                             while(rs.next()) {
                                 ++cardNr;
                                 ID=rs.getInt(1);
+                                date=rs.getString(2); //retin a primului card, daca e unu
                             }
                             if(cardNr==0){
                                 SwingUtilities.invokeLater(() -> new Application(user.getText()));
                             }
                             else if(cardNr==1) {
-                                //am stocat primul ID, il setez true(in caz de stergere card)
-                                pt=connection.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
-                                pt.setString(1,"T");
-                                pt.setInt(2,ID);
-                                pt.executeUpdate();
-                                SwingUtilities.invokeLater(() -> new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                                boolean expire= Card.verifyExpireDate(date);
+                                int result=JOptionPane.YES_OPTION;
+                                if(!expire){
+                                        int comp=JOptionPane.showConfirmDialog(null,"Cardul este expirat! Doriti sa il " +
+                                                "prelungiti cu un an?","Card expirat!",JOptionPane.YES_NO_OPTION);
+                                        if(comp==JOptionPane.YES_OPTION)
+                                            Card.expandContract(date,ID);
+                                        else
+                                            result=JOptionPane.NO_OPTION;
+                                }
+
+                                if(result==JOptionPane.YES_OPTION) {
+                                    //am stocat primul ID, il setez true(in caz de stergere card)
+                                    pt = connection.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
+                                    pt.setString(1, "T");
+                                    pt.setInt(2, ID);
+                                    pt.executeUpdate();
+                                    SwingUtilities.invokeLater(() -> new Application(user.getText())); //pornim aplicatia in sine, cea din care putem sa gestionam activitatile contului
+                                }
                             }
                             else if(cardNr==2){
                                 frame.dispose();
@@ -285,7 +301,8 @@ public class LoginInterface {
         });
 
         singUp.addActionListener((ae) -> {
-            JOptionPane.showConfirmDialog(frame, "TODO", "TODO", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showConfirmDialog(frame, "Veti fi redirectionati spre procesul de inregistrare!",
+                    "Sign up", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE);
             final SingUpInterface singUp = new SingUpInterface();
             frame.dispose();
             SwingUtilities.invokeLater(singUp::launchSingIn);
@@ -323,5 +340,4 @@ public class LoginInterface {
             return false;
         return true;
     }
-    //TODO creare obiect de tip card;
 }

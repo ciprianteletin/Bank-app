@@ -152,6 +152,14 @@ public class Application extends JFrame{
                     }
                 }
             });
+
+            transfer.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    Application.this.setEnabled(false);
+                    SwingUtilities.invokeLater(()->new Transfer(card,()->Application.this.setEnabled(true),username));
+                }
+            });
         }
 
         private void setImage(){

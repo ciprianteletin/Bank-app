@@ -1,6 +1,7 @@
 package com.selector;
 
 import com.URL;
+import com.card.Card;
 import com.core.Application;
 import com.core.Settings;
 import com.login.LoginInterface;
@@ -36,12 +37,34 @@ public class TwoCards extends JFrame {
     private void makeID(int ID){
         try{
             Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
-            PreparedStatement pst=conn.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
-            pst.setString(1,"T");
-            pst.setInt(2,ID);
-            pst.executeUpdate();
-            TwoCards.this.dispose();
-            SwingUtilities.invokeLater(()->new Application(username));
+            PreparedStatement pst=conn.prepareStatement("SELECT expire_date FROM card_data WHERE cardID=?");
+            pst.setInt(1,ID);
+            ResultSet rs=pst.executeQuery();
+            rs.next();
+            String date=rs.getString(1);
+            boolean expire= Card.verifyExpireDate(date);
+            int result=JOptionPane.YES_OPTION;
+            if(!expire){
+                int comp=JOptionPane.showConfirmDialog(null,"Cardul este expirat! Doriti sa il " +
+                        "prelungiti cu un an?","Card expirat!",JOptionPane.YES_NO_OPTION);
+                if(comp==JOptionPane.YES_OPTION)
+                    Card.expandContract(date,ID);
+                else {
+                    result = JOptionPane.NO_OPTION;
+                    TwoCards.this.dispose();
+                    SwingUtilities.invokeLater(new LoginInterface()::start); //mergem la start..
+                }
+            }
+
+            if(result==JOptionPane.YES_OPTION) {
+                pst = conn.prepareStatement("UPDATE card_type SET current=? WHERE cardID=?");
+                pst.setString(1, "T");
+                pst.setInt(2, ID);
+                pst.executeUpdate();
+                TwoCards.this.dispose();
+                SwingUtilities.invokeLater(() -> new Application(username));
+            }
+            conn.close();
         }catch (SQLException sql){
             JOptionPane.showMessageDialog(null,"Can't select the card from database.." +
                     "closing the app");

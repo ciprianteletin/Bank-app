@@ -54,7 +54,7 @@ public class Card {
             rs=pst.executeQuery();
             rs.next();
             String virat=rs.getString(1);
-            if(data<=zi && virat.equals("F")){
+            if(data<=zi && virat.equals("F") && data!=-1){
                 double dob=Math.round(((dobanda*venit)/100)*100)/100.0;
                 setSuma(getSuma()+venit+dob);
                 updateDB();
@@ -71,7 +71,7 @@ public class Card {
                 pst.setDate(5,Date.valueOf(LocalDate.now()));
 
                 pst.executeUpdate();
-            }else if(data>zi && virat.equals("T")){
+            }else if(data>zi && virat.equals("T") && data!=-1){
                 pst=conn.prepareStatement("UPDATE card_type SET virat=? WHERE cardID=?");
                 pst.setString(1,"F");
                 pst.setInt(2,ID);
@@ -91,22 +91,26 @@ public class Card {
             pst.setInt(1,ID);
             ResultSet rs=pst.executeQuery();
             rs.next();
-            double limita=Math.round(rs.getDouble(1)*100)/100.0;
-            if(!moneda.equals("Lei")){
-                Currency currency=Currency.valueOf(moneda.toUpperCase());
-                limita=currency.convertDinLei(limita);
-                //convert the current limit to the actual card currency;
-            }
-            int day=rs.getInt(2);
-            int zi=LocalDate.now().getDayOfMonth();
-            if(day!=zi){
-                setLim_transfer(limita);
-                pst=conn.prepareStatement("UPDATE data_limit SET zi=? WHERE cardID=?");
-                pst.setInt(1,zi);
-                pst.setInt(2,ID);
-                pst.executeUpdate();
-                updateDB();
-            }
+            double limita;
+            if(rs.getDouble(1)!=-1) {
+                limita = Math.round(rs.getDouble(1) * 100) / 100.0;
+                if (!moneda.equals("Lei")) {
+                    Currency currency = Currency.valueOf(moneda.toUpperCase());
+                    limita = currency.convertDinLei(limita);
+                    //convert the current limit to the actual card currency;
+                }
+            }else
+                limita=-1;
+                int day = rs.getInt(2);
+                int zi = LocalDate.now().getDayOfMonth();
+                if (day != zi) {
+                    setLim_transfer(limita);
+                    pst = conn.prepareStatement("UPDATE data_limit SET zi=? WHERE cardID=?");
+                    pst.setInt(1, zi);
+                    pst.setInt(2, ID);
+                    pst.executeUpdate();
+                    updateDB();
+                }
         }catch (SQLException sql){
             sql.printStackTrace();
             JOptionPane.showMessageDialog(null,"Can't create my card...closing the app",
@@ -241,6 +245,43 @@ public class Card {
             conn.close();
         }catch (SQLException sql){
             //Nothing
+        }
+    }
+
+    public static boolean verifyExpireDate(String expire){
+        String[] date=expire.split("/");
+        int month=Integer.parseInt(date[0]);
+        int year=Integer.parseInt(date[1]);
+
+        int currentMonth=LocalDate.now().getMonthValue();
+        int currentYear=LocalDate.now().getYear();
+
+        if(currentYear>year)
+            return false;
+
+        if(currentYear==year && currentMonth>=month)
+            return false;
+
+        return true;
+    }
+
+    public static void expandContract(String expire,int cardID){
+        String[] date=expire.split("/");
+        int month=Integer.parseInt(date[0]);
+        int year=Integer.parseInt(date[1]);
+        ++year;
+        String newDate=month+"/"+year;
+        try{
+            Connection connection=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            PreparedStatement pst=connection.prepareStatement("UPDATE card_data SET expire_date=? WHERE cardID=?");
+            pst.setString(1,newDate);
+            pst.setInt(2,cardID);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Prelungire realizata cu success!");
+            connection.close();
+        }catch (SQLException sql){
+            JOptionPane.showMessageDialog(null,"Can't launch the app..Closing everything");
+            System.exit(1);
         }
     }
 

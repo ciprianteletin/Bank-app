@@ -49,6 +49,7 @@ public abstract class GenerateCard {
             moneda = "Euro";
         }else if(tipCard==TipCard.Depozit){
             limita=-1;
+            limitaRo=-1;
         }
         boolean sumCard=true;
         try{

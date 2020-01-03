@@ -69,7 +69,7 @@ public class Online {
 
                     if(!card.getMoneda().equals("Lei")){
                         Currency curr=Currency.valueOf(card.getMoneda().toUpperCase());
-                        price=curr.convertDinLei(price);
+                        price=curr.forTransfer(price);
                     }
 
                     int result=JOptionPane.showConfirmDialog(null,"We identify the next product:\n" +
@@ -80,7 +80,7 @@ public class Online {
                             JOptionPane.showMessageDialog(null,"Insufficient money");
                             return;
                         }
-                        if(price+comm>card.getLim_transfer()){
+                        if(price+comm>card.getLim_transfer() && card.getLim_transfer()!=-1){
                             JOptionPane.showMessageDialog(null,"Your limit is exceeded");
                             return;
                         }

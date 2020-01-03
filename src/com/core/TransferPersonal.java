@@ -79,11 +79,13 @@ class TransferPersonal {
                     return;
                 }
 
-                double plata=Double.parseDouble(pay.getText());
+                double plata=Math.round(Double.parseDouble(pay.getText())*100)/100.0;
+
                 if(!card.getMoneda().equals("Lei")){
                     Currency currency=Currency.valueOf(card.getMoneda().toUpperCase());
                     plata=currency.convertDinLei(plata);
                 }
+
                 if(plata>card.getSuma()){
                     JOptionPane.showMessageDialog(null,"The amount inserted is greater than the amount from card!",
                             "Amount too low",JOptionPane.WARNING_MESSAGE);
@@ -91,7 +93,7 @@ class TransferPersonal {
                 }
                 //limita nu se modifica, fiindca e transfer intre conturi proprii
 
-                String iban=ibanText.getText();
+                String iban=ibanText.getText().toUpperCase();
                 if(cards==1){
                     if(!iban1.getText().toLowerCase().equals(iban.toLowerCase())){
                         JOptionPane.showMessageDialog(null,"The inserted IBAN doesn't belong to one of your personal cards",
@@ -105,6 +107,7 @@ class TransferPersonal {
                         return;
                     }
                 }
+                    enable.enable();
                     try{
                         PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE IBAN=?");
                         pst.setString(1,iban);
@@ -131,7 +134,7 @@ class TransferPersonal {
                             Currency currency=Currency.valueOf(moneda.toUpperCase());
                             plata=currency.forTransfer(plata); //sa cumparam la valoarea actuala, nu cu taxa de vanzare a bancii;
                         }
-                        
+
                         //update financiar card cu iban dat
                         pst=conn.prepareStatement("UPDATE financiar SET suma=suma+? WHERE cardID=?");
                         pst.setDouble(1,plata);
@@ -154,7 +157,6 @@ class TransferPersonal {
                         //data e la fel;
                         pst.executeUpdate();
                         conn.close();
-                        enable.enable();
                         JOptionPane.showMessageDialog(null,"Transfer between cards realised with success!");
                         display.dispose();
                     }catch (SQLException sql){
