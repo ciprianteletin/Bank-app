@@ -1,5 +1,9 @@
 package com.cardGenerator;
 
+/**
+ * In cadrul acestei enumeratii se retin valorile referitoare la comisioane in cadrul fiecarui tip de card.
+ * Aceste date au fost alese aleator, in functie de tipul de card ales.
+ */
 public enum TipCard {
     //a student is basically a student, no job or another income source, except his parents;
     Debit(0.1,0,0.7,1.5,400),

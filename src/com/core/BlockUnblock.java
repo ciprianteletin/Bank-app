@@ -9,6 +9,11 @@ import java.awt.event.*;
 import java.awt.*;
 import java.sql.*;
 
+/**
+ * Clasa folosita pentru blocarea/deblocarea cardului, la cererea utilizatorului. Cardul este blocat doar daca utilizatorul confirma
+ * acest lucru prin introducerea parolei. Se va bloca cardul curent, utilizatorul nemaiputand efectua operatii in acel caz.
+ * Butonul a fost gandit in caz de furt al cardului, acesta fiind blocat pana la restituirea sa.
+ */
 public class BlockUnblock{
     private JFrame display;
     private JButton confirm;
@@ -18,6 +23,15 @@ public class BlockUnblock{
     private Enable enable;
     private ChangeNameEvent change;
 
+    /**
+     * In cadrul constructorului am realizat atat initializarea componentelor, cat si adaugarea unui eveniment pentru butonul de confirmare
+     * In cadrul evenimentului pentru apasarea butonului, se verifica daca parolele introduse sunt corecte din punct de vedere sintactic,
+     * cat si alterarea informatiei din cadrul bazei de date in cazul in care se doreste cu adevarat blocarea cardului.
+     * De astfel, prin intermediul acestei metode, se produce si schimbarea butonului de BlockCard in UnblockCard(schimbare nume).
+     * @param username
+     * @param e
+     * @param c
+     */
     public BlockUnblock(String username,Enable e,ChangeNameEvent c){
         this.enable=e;
         this.change=c;
@@ -97,7 +111,9 @@ public class BlockUnblock{
             }
         });
     }
-
+    /**
+     * In caz de inchidere a acestei interfete, restaurez focus-ul asupra interfetei grafice Settings.
+     */
     private void addClose(){
         display.addWindowListener(new WindowAdapter() {
             @Override

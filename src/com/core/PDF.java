@@ -6,6 +6,10 @@ import java.util.Date;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 
+/**
+ * Clasa in cadrul careia folosesc API-ul ItextPDF, prin intermediul careia datele utilizatorului(precum numele acestuia, IBAN etc)
+ * se transpun intr-un PDF , salvat in calculatorul personal a acestuia(la alegerea sa) si gata pentru a fi printat.
+ */
 public class PDF {
     private Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
@@ -33,6 +37,11 @@ public class PDF {
         document.addCreator(bank);
     }
 
+    /**
+     * Adaugarea de informatii in PDF, date ce se regasesc in baza de date
+     * @param document
+     * @throws DocumentException
+     */
     private void addTitlePage(Document document)
             throws DocumentException {
         Paragraph preface = new Paragraph();
@@ -69,6 +78,9 @@ public class PDF {
         }
     }
 
+    /**
+     * metoda folosita pentru crearea documentului PDF, unde se poate evidentia folosirea API-ului.
+     */
     public void createDoc(){
         try {
             Document document = new Document();

@@ -3,6 +3,11 @@ package com.card;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Interfata grafica prin intermediul careia afisez datele stocate pe card, precum sold curent, moneda actuala, limita de operatiuni etc
+ * In metodele de mai jos si prin intermediul constructorului se initializeaza fiecare panel din cadrul Frame-ului principal, in cadrul
+ * carora se regasesc multiple label-uri pentru afisarea de informatii
+ */
 public class SoldCard {
     private Card card;
     private JFrame display;
@@ -66,6 +71,10 @@ public class SoldCard {
         display.add(descriere);
     }
 
+    /**
+     * Metoda in cadrul careia se initializeaza si extrag datele specifice(comisioane si dobanzi) din cardul bancar si care se vor
+     * depune in label-uri specifice.
+     */
     private void initComisioane(){
         com_dobanda=new JPanel(new GridLayout(4,2));
         com_dobanda.setBackground(new Color(56,56,56));

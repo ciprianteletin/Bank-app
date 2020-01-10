@@ -9,7 +9,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.time.LocalDate;
-
+/**
+ * Are acelasi scop si functionalitate precum clasa Transfer, diferenta fiind ca in cazul transferului personal, IBAN-ul fiecarui
+ * card de pe cont(exceptandu-l pe cel curent) este afisat, iar comisioanele de transfer nu sunt aplicabile de aceasta data.
+ */
 class TransferPersonal {
     private JFrame display;
     private JPanel inserter,ibans,push;

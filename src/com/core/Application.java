@@ -92,7 +92,10 @@ public class Application extends JFrame{
             });
         }
 
-        private void makeButtons(){
+    /**
+     * La fel ca in cazul SecondApplication, se vor apela interfetele specifice fiecarui buton in parte
+     */
+    private void makeButtons(){
             cursValutar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -163,7 +166,7 @@ public class Application extends JFrame{
         }
 
         private void setImage(){
-            ImageIcon img=new ImageIcon("/home/cipri/Downloads/online-shop.png");
+            ImageIcon img=new ImageIcon("./imagini/online-shop.png");
             image=new JLabel("",img,JLabel.CENTER);
         }
 
@@ -275,7 +278,7 @@ public class Application extends JFrame{
             );
 
             switchPage.setText("SwitchPage");
-            settings.setIcon(new ImageIcon("/home/cipri/Downloads/settings.png"));
+            settings.setIcon(new ImageIcon("./imagini/settings.png"));
             settings.setBorderPainted(false);
 
             GroupLayout layout = new GroupLayout(getContentPane());

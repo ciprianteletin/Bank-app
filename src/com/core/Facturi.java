@@ -10,6 +10,10 @@ import java.awt.event.*;
 import java.sql.*;
 import java.time.LocalDate;
 
+/**
+ * Interfata grafica ce are scopul de a permite utilizatorului sa plateasca facturi online spre diversi furnizori, cum ar fi ENEL, E-ON,
+ * RCD&RDS etc.
+ */
 class Facturi {
     private JFrame display;
     private JPanel date,press;
@@ -48,6 +52,11 @@ class Facturi {
         });
     }
 
+    /**
+     * Se verifica in cadrul acestei metode daca suma de transfer este disponibila pe card, cat si daca limita de transfer este sau nu
+     * depasita, context in care, se afiseaza un mesaj de avertizare. Daca totul este in regula, se efectueaza tranzactia, introducandu-se
+     * in cadrul tabelei "tranzactii", se actualizeaza datele de pe card cat si tabelele ce contin acest gen de informatii.
+     */
     private void pressConfig(){
         pay.addActionListener(new ActionListener() {
             @Override
@@ -190,7 +199,7 @@ class Facturi {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
                 char c=keyEvent.getKeyChar();
-                if(!Character.isAlphabetic(c) && !Character.isSpaceChar(c))
+                if(!Character.isAlphabetic(c) && !Character.isSpaceChar(c) && c!='-' && c!='&')
                     keyEvent.consume();
                 else if(!furnizor.getText().isEmpty() && Character.isSpaceChar(c) &&
                         (Character.isSpaceChar(furnizor.getText().charAt(furnizor.getText().length()-1))))

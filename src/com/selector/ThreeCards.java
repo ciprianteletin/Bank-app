@@ -10,7 +10,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
-//TODO
+/**
+ * Asa ca si fratele sau(TwoCards, deoarece au multe metode in comun, cat si aceleasi scopuri, singura diferenta fiind numarul de carduri),
+ * dispune de aceleasi functionalitati, cat si aranjare vizuala. Stergerea si selectarea cardului curent se fac prin intermediul JDBC,
+ * pentru a ne conecta si sterge/primi datele in functie de operatia aleasa de catre utilizator.
+ **/
 public class ThreeCards{
 
     private JFrame display;
@@ -43,6 +47,10 @@ public class ThreeCards{
         display.setVisible(true);
     }
 
+    /**
+     * Stergerea cardului cu ID-ul selectat prin intermediul statement-ului DELETE.
+     * @param ID
+     */
     private void removeCard(int ID){
         try{
             Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
@@ -75,6 +83,9 @@ public class ThreeCards{
         }
     }
 
+    /**
+     * Apelarea metodelor specifice in functie de cardul si operatia selectata.
+     */
     private void configButtons() {
         card1.addActionListener((e) -> {
             if (selectOrRemove == 0) {
@@ -213,6 +224,9 @@ public class ThreeCards{
         }
     }
 
+    /**
+     * Creare de componente si initializarea acestora
+     */
     private void initComponents() {
         panelCard1=new JPanel(new GridLayout(4,1));
         panelCard1.setBackground(new Color(56,56,56));
@@ -222,15 +236,15 @@ public class ThreeCards{
         panelCard3.setBackground(new Color(56,56,56));
         card1 = new JButton();
         card1.setBackground(new Color(56,56,56));
-        card1.setIcon(new ImageIcon("/home/cipri/Downloads/card1s.png"));
+        card1.setIcon(new ImageIcon("./imagini/card1s.png"));
         card1.setBorderPainted(false);
         card2 = new JButton();
         card2.setBackground(new Color(56,56,56));
-        card2.setIcon(new ImageIcon("/home/cipri/Downloads/card2s.png"));
+        card2.setIcon(new ImageIcon("./imagini/card2s.png"));
         card2.setBorderPainted(false);
         card3 = new JButton();
         card3.setBackground(new Color(56,56,56));
-        card3.setIcon(new ImageIcon("/home/cipri/Downloads/card3s.png"));
+        card3.setIcon(new ImageIcon("./imagini/card3s.png"));
         card3.setBorderPainted(false);
         bankCard1 = new JLabel();
         bankCard1.setForeground(new Color(255,255,255));

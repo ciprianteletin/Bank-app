@@ -1,5 +1,10 @@
 package com.criptography;
 
+/**
+ * Clasa in cadrul careia se cripteaza parola utilizatorului inainte sa fie stocata in cadrul tabelului passwords din baza de
+ * date a aplicatiei. Algoritmul ales este unul unic, venit din inspiratie proprie si combinarea mai multor algoritmi simpli
+ * cunoscuti.
+ */
 public class Encrypt {
     private String message;
 

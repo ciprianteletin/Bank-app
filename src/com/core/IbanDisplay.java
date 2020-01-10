@@ -39,7 +39,7 @@ public class IbanDisplay {
         title=new JPanel();
         title.setBackground(new Color(20,50,50));
         titleLb=new JLabel();
-        titleLb.setIcon(new ImageIcon("/home/cipri/Downloads/iban.png"));
+        titleLb.setIcon(new ImageIcon("/home/cipri/Aplicatie Bancara/imagini/iban.png"));
         title.setLayout(new FlowLayout(FlowLayout.LEFT));
         title.add(titleLb);
         title.add(user);
@@ -69,6 +69,10 @@ public class IbanDisplay {
         display.add(west,BorderLayout.WEST);
     }
 
+    /**
+     * Metoda prin intermediul careia se face conexiunea la baza de date si se extrag informatiile dorite pentru afisarea acestora.
+     * Se vor extrage numele, prenumele, IBAN, tipul cardului si banca reprezentanta.
+     */
     private void takeData(){
         try {
             Connection c = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
@@ -140,14 +144,16 @@ public class IbanDisplay {
         print=new JButton();
         print.setBorderPainted(false);
         print.setBackground(new Color(20,50,50));
-        print.setIcon(new ImageIcon("/home/cipri/Downloads/printer.png"));
+        print.setIcon(new ImageIcon("./imagini/printer.png"));
         SwingUtilities.invokeLater(inv1::requestFocus);
         east.add(inv1);
         east.add(print);
         east.add(inv2);
         display.add(east,BorderLayout.EAST);
     }
-
+    /**
+    Setarea functionalitatii butonului de print, si anume deschiderea interfetei grafice FileChooser.
+     */
     private void makePrint(){
         print.addActionListener(new ActionListener() {
             @Override

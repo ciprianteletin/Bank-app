@@ -14,6 +14,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+/**
+ * Clasa cu acelasi rol ca si cea numita Istoric, cu mentiunea ca in cazul acestei interfete grafice, utilizatorul poate preciza
+ * anumite criterii pentru afisarea tranzactiilor, precum data in care s-au efectuat, intervalul de pret sau numele produsului(
+ * poate fi si o parte din acesta, se vor face potriviri pe text, fara a tine cont de dimensiunea literelor).
+ *
+ * Fiecare metoda de cautare(implementata pentru fiecare buton in parte) va verifica existenta tranzactiilor, caz in care
+ * se va afisa un mesaj de eroare. La fiecare afisare, se vor afisa doar tranzactiile corecte(se va goli la fiecare reutilizare
+ * zona de text).
+ */
 public class Search {
     private JFrame display;
     private JDatePanelImpl datePanel;
@@ -155,6 +164,12 @@ public class Search {
         display.add(constant);
     }
 
+    /**
+     * In aceasta metoda se poate observa modificarea(prin intermediul apelului prin alta metoda) dinamica a continutului si a
+     * componentelor panoului din partea de jos a interfetei.
+     * Aceasta modificare se face in functie de optiunea selectata, astfel incat utilizatorul poate introduce si cauta tranzactii
+     * in functie de necesitate
+     */
     private void addComboListener(){
         selectare.addActionListener(new ActionListener() {
             @Override
@@ -383,7 +398,7 @@ public class Search {
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 }
-//pentru formatul specific dat
+//pentru formatul specific dat, astfel incat data extrasa si afisata sa fie in formatul necesar pentru obiecte de tip Date(java.sql.Date)
 class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
 
     private String datePattern = "yyyy-MM-dd";

@@ -1,5 +1,11 @@
 package com.cardGenerator;
 
+/**
+ * Am folosit aceasta enumeratie pentru stocarea de informatii utile(precum cifrul bancii) in cadrul unor obiecte unice;
+ * In cadrul unei enumeratii, constructorul este privat, astfel incat exista un singur obiect de acel tip(BCR, BT..), oricate
+ * referinte ar fi spre acesta.
+
+ */
 public enum Banci {
     BCR(1.5,0.7,2.3,0.3,"RNCB",2650),
     BT(1.0,0.7,3.4,0.5,"BTRL",3200),

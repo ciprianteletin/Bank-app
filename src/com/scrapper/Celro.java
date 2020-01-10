@@ -8,6 +8,8 @@ import javax.swing.*;
 
 /**
  * The purpose of this class is to get the price of the product as well as the name of it from the online marketplace Cel.ro;
+ * Addressed method to extract desired data: obtain the document(html code) from the specific web page, sending specific html paragraph
+ * to methods with the purpose to target and extract the data that the user wants to see.
  */
 
 public class Celro extends Scrapper {

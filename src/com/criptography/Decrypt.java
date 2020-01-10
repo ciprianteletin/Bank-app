@@ -1,5 +1,8 @@
 package com.criptography;
-
+/**
+ * Prin intermediul acestei clase se decripteaza parola odata ce a fost luata din baza de date pentru a putea fi verificata, spre exemplu,
+ * atunci cand clientul doreste sa intre in contul sau.
+ */
 public class Decrypt {
     private String message;
 

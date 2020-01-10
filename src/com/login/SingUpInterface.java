@@ -15,10 +15,11 @@ import javax.swing.*;
 
 /**
  * The purpose of this class is to let the user to create an personal account, with unique ID,email,and other personal data;
+ * A big part of the methods of this class had a role in creating and designing all the components required; For example,
+ * label Icons and their position, placeholders and what happens in case of focus of a specific field.
+ * Also, every text-field has a key-typed restriction, to prevent wrong data to be inserted.
  * @author cipri
  */
-//TODO PUNE PAROLA IN BAZA DE DATE IN MOD CRYPTAT!!!(ENCRYPT SI DECRYPT, apel launch)
-//TODO VERIFICARE MAIL,cnp,telefon diferit
 class SingUpInterface{
     private JFrame singUpFrame;
     private JPanel insertBoxes,btnPanel;
@@ -40,14 +41,14 @@ class SingUpInterface{
         insertBoxes.setPreferredSize(new Dimension(500,1000));
         insertBoxes.setBackground(new Color(0,128,128));
         insertBoxes.setLayout(new FlowLayout(FlowLayout.CENTER,5,60));
-        ImageIcon img=new ImageIcon("/home/cipri/Downloads/rename.png");
+        ImageIcon img=new ImageIcon("./imagini/rename.png");
         Image resize=img.getImage().getScaledInstance(220,250,Image.SCALE_DEFAULT);
         img=new ImageIcon(resize);
         JLabel label=new JLabel("",img,JLabel.CENTER);
         label.setMaximumSize(new Dimension(200,200));
         insertBoxes.add(label);
         JLabel star;
-        img=new ImageIcon("/home/cipri/Downloads/star.png");
+        img=new ImageIcon("./imagini/star.png");
         resize=img.getImage().getScaledInstance(35,35,Image.SCALE_SMOOTH);
         img=new ImageIcon(resize);
         star=new JLabel("",img,JLabel.CENTER);
@@ -151,6 +152,9 @@ class SingUpInterface{
         this.insertBoxes.add(phoneNumber);
     }
 
+    /**
+     * I created this label with the purpose in mind to keep away the focus from any textField at the start of this frame.
+     */
     private void fakeLabel(){
         JLabel fake=new JLabel("Invisible");
         fake.setPreferredSize(new Dimension(1000,20));
@@ -166,7 +170,7 @@ class SingUpInterface{
     }
 
     private void makeStar(){
-        ImageIcon img=new ImageIcon("/home/cipri/Downloads/star.png");
+        ImageIcon img=new ImageIcon("./imagini/star.png");
         Image resize=img.getImage().getScaledInstance(35,35,Image.SCALE_SMOOTH);
         img=new ImageIcon(resize);
         JLabel star=new JLabel("",img,JLabel.CENTER);
@@ -521,12 +525,21 @@ class SingUpInterface{
         });
     }
 
+    /**
+     * Creating an object of LocalDate class from the String Date inserted by the user(his age)
+     * @param data
+     * @return
+     */
     private LocalDate convertDate(String data){
         String[] dateSplit=data.split("/");
         data=dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[0];
         return LocalDate.parse(data);
     }
 
+    /**
+     * Method which gets us the age of the user, method called when needed to create the card and the data retained by it
+     * @return
+     */
     private int convertToAge(){
             DateTimeFormatter format = DateTimeFormatter
                     .ofPattern("dd/MM/yyyy");
@@ -554,6 +567,17 @@ class SingUpInterface{
         email.setText("");
     }
 
+    /**
+     * Here I add a specific event to every button;
+     * For the reset button, I did the following: Asking the user if he is really sure about deleting all the data inserted;
+     * If the user option is yes, I clear all components, I reset the foreground specific for placeholders and I set the text back
+     * in place;
+     *
+     * For the confirm button, I did multiple things, like checking if all the data inserted are correct or not
+     * ,verifying if the username has been taken already, same in the case of
+     * the CNP, email address and phone number. If everything is alright, I insert all the received data in database and
+     * I call the next interface, ChooseAccount.
+     */
     private void activateButtons(){
         reset.addActionListener(new ActionListener() {
             @Override
@@ -706,7 +730,9 @@ class SingUpInterface{
         this.job.setText("Job: ");
     }
 
-
+    /**
+     * This is like the constructor of the class, here I call all the methods to do their specific job;
+     */
     void launchSingIn(){
         this.initializeFrame();
         this.initializePanel();
@@ -723,7 +749,7 @@ class SingUpInterface{
 
     /**
     This inner private class has the purpose to validate my input and to show different output windows in case of
-     incorrectness
+    data incorrectness
      @author cipri
      @version 1.0
      **/
@@ -754,6 +780,12 @@ class SingUpInterface{
                 JOptionPane.showMessageDialog(null,"LastName must respect the following format: " +
                                 "Capital letter,Small letters","Wrong LastName"
                         ,JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
+            if(password.getText().length()<=3){
+                JOptionPane.showMessageDialog(null,"Password must contain more than three characters!",
+                        "Password too short",JOptionPane.WARNING_MESSAGE);
                 return false;
             }
 

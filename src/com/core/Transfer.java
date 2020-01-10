@@ -11,7 +11,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.time.LocalDate;
-
+/**
+ * Clasa utilizata pentru realizarea de transfer intre  utilizatori diferiti, prin introducerea datelor de card specifice, precum
+ * IBAN si nume utilizator al persoanei caruia i se va face transferul.
+ */
 class Transfer {
     private JFrame display;
     private JPanel inserter,push;
@@ -23,6 +26,12 @@ class Transfer {
     private Connection conn;
     private String username;
 
+    /**
+     * Constructor in cadrul caruia se realizeaza conexiunea catre Baza de date a aplicatiei;
+     * @param c
+     * @param e
+     * @param user
+     */
     Transfer(Card c,Enable e,String user){
         this.username=user;
         this.card=c;
@@ -129,6 +138,13 @@ class Transfer {
         });
     }
 
+    /**
+     * In aceasta metoda se adauga eveniment pentru butonul de transfer bancar.Metoda verifica daca datele introduse sunt corecte si daca
+     * acestea au fost introduse, caz in care se verifica daca plata se poate efectua(prin verificarea limitei si a sumei de pe card). Daca
+     * cardul caruia dorim sa ii transferam banii are alta moneda fata de cea de pe card, se va realiza transferul in moneda cardului
+     * respectiv. Dupa efectuarea transferului, datele de pe cardul curent vor fi verificate, iar in tabela tranzactii din cadrul
+     * bazei de date vor fi introduse date pentru ambele carduri.
+     */
     private void configTransfer(){
         transfer.addActionListener(new ActionListener() {
             @Override

@@ -1,5 +1,8 @@
 package com.cardGenerator;
 
+/**
+ * Enumeratie in cadrul careia stochez suma de cumparare/vanzare pentru fiecare tip de moneda in parte;
+ */
 public enum Currency {
     //Buy and sell currency;
     EURO(0,0),DOLAR(0,0),LIRA(0,0);

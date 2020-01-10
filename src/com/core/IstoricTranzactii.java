@@ -10,7 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.*;
-
+/**
+ * Prin intermediul clasei IstoricTranzactii, se afiseaza(folosind interfata grafica creata prin clasa ScrollTranzactii).
+ * Afisarea tranzactiilor se face in functie de optiunea aleasa de utilizator, care poate opta sa afiseze 5,10,15,20 sau
+ * toate tranzactiile disponibile in tabela tranzactii pentru ID-ul corespunzator cardului.
+ */
 public class IstoricTranzactii {
     private Enable enable;
     private Card card;
@@ -48,6 +52,11 @@ public class IstoricTranzactii {
         });
     }
 
+    /**
+     * In cadrul acestei metode se initializeaza obiectul de tip JComboBox si totodata se extrage din tabela tranzactii numarul
+     * acestora asociate cardului;
+     * Daca nu exista nici o tranzactie, interfata de istoric se inchide afisandu-se un mesaj
+     */
     private void initComponents(){
         select =new JLabel("Selectati numarul de tranzactii pe care doriti sa le vizualizati");
         select.setForeground(new Color(255,255,255));
@@ -75,6 +84,7 @@ public class IstoricTranzactii {
         if(nr==0){
             JOptionPane.showMessageDialog(null,"Nu exista tranzactii!");
             display.dispose();
+            enable.enable();
             return;
         }
         total+="("+nr+")";
@@ -90,6 +100,10 @@ public class IstoricTranzactii {
         display.add(show);
     }
 
+    /**
+     * Aceasta metoda afiseaza, in functie de numarul ales de utilizator, ultimele tranzactii efectuate. In cazul in care numarul
+     * selectat depaseste numarul de tranzactii ale cardului, se vor afisa toate tranzactiile actuale.
+     */
     private void configButton(){
         show.addActionListener(new ActionListener() {
             @Override

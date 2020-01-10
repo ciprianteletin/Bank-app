@@ -3,6 +3,11 @@ package com.core;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Interfata grafica ce contine un scroll pane si un text-area, in cadrul carora se vor afisa tranzactiile cerute din cadrul interfetelor
+ * Istoric, cat si SearchTranz. S-a folosit un scroll pane pentru cazul in care tranzactiile sunt multe din punct de vedere numeric/lungi,
+ * si nu mai incap pe ecranul utilizator.
+ */
 public class ScrollTranzactii {
     private JFrame display;
     private JTextArea textArea;
@@ -28,7 +33,7 @@ public class ScrollTranzactii {
 
         display.add(scrollPane,BorderLayout.CENTER);
     }
-
+    //Returnare frame si zona de text, pentru actualizare si inchidere.
     JTextArea getTextArea(){return textArea;}
     JFrame getFrame(){return display;}
 }

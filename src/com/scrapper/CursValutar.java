@@ -6,8 +6,16 @@ import org.jsoup.nodes.*;
 import javax.swing.*;
 import java.io.IOException;
 
+/**
+ * Prin utilizarea acestei clase extrag valorile curente a diferitelor monede de uz international(Lira, Euro, Dolar) de pe site-ul
+ * Bancii Nationale Romane(cursvalutar.ro), astfel ca, cursul valutar pe care utilizatorul il vede si care se aplica in cadrul schimbului
+ * valutar este actualizat la zi.
+ *
+ * Comparativ cu restul claselor ce au ca si rol preluarea de date online, aici se manipuleaza textul primit din cadrul paginii web.
+ */
 public class CursValutar {
     private  String curs;
+
     public double getLira(){
         String text=curs.substring(curs.indexOf("Lira sterlin"));
         StringBuilder val=new StringBuilder("");

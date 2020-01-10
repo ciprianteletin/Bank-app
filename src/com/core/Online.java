@@ -11,6 +11,10 @@ import java.awt.event.*;
 import java.sql.*;
 import java.time.LocalDate;
 
+/**
+ * In momentul crearii unui obiect de acest tip, se va afisa o interfata grafica ce va permite utilizatorului sa cumpere produse online,
+ * de pe pagini precum PcGarage, Emag, Cel.ro.
+ */
 public class Online {
     private JFrame display;
     private JLabel ln;
@@ -49,6 +53,13 @@ public class Online {
         });
     }
 
+    /**
+     * In momentul apasarii butonului de confirmare, se vor extrage datele(pret si nume al produsului). Apoi, utilizatorul va fi intrebat
+     * prin intermediul unui JOptionPane daca acesta doreste sau nu sa cumpere produsul. In cazul unui raspuns de confirmare, se va verifica
+     * suma de pe card si limita curenta(cat si tipul monedei pentru transformare a pretului). Daca toate datele sunt in regula, se va
+     * introduce in tabela de tranzactii asociata contului curent, se vor aplica comisioanele prestabilite iar apoi se vor actualiza datele
+     * cardului curent.
+     */
     private void confirmAction(){
         confirm.addActionListener(new ActionListener() {
             @Override

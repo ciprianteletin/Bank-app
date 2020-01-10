@@ -15,6 +15,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ *Interfata grafica ce reprezinta panoul de setari al contului/cardului curent activ.
+ */
 public class Settings extends JFrame {
     private JButton changeCard, addCard;
     private JButton changePassword, removeCard;
@@ -53,6 +56,9 @@ public class Settings extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Se seteaza numele cardului in functie de starea curenta a cardului activ.
+     */
     private void setBlockName(){
         if(card!=null && card.isBlocked())
             blockCard.setText("UnblockCard");
@@ -60,6 +66,10 @@ public class Settings extends JFrame {
             blockCard.setText("BlockCard");
     }
 
+    /**
+     * Metoda prin intermediul caruia se creeaza un obiect de tip card, ce retine datele actualizate legate de starea financiara a cardului
+     * Crearea cardului se face prin extragerea datelor specifice din baza de date conceputa special pentru aplicatie.
+     */
     private void createCard(){
         try{
             Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
@@ -76,6 +86,11 @@ public class Settings extends JFrame {
         }
     }
 
+    /**
+     * Prin aceasta metoda se realizeaza blocarea cardului prin construirea unui obiect de tip BlockCard.
+     * De asemenea, in cadrul acestei metode se modifica numele butonului cat si atributul cardului referitor la faptul daca e
+     * blocat sau nu.
+     */
     private void blockButton(){
         blockCard.addActionListener(new ActionListener() {
             @Override
@@ -96,7 +111,11 @@ public class Settings extends JFrame {
             }
         });
     }
-
+    /**
+     * Buton ce are rolul de a sterge cardul selectat de catre utilizator. In cazul in care cardul selectat pentru stergere era unicul
+     * card, utilizatorul este intrebat daca vrea sa isi stearga contul sau sa il pastreze. In cazul in care acesta doreste pastrarea
+     * contului, mare parte din functionalitatile aplicatiei nu vor fi disponibile.
+     */
     private void removeButton(){
         removeCard.addActionListener(new ActionListener() {
             @Override
@@ -185,6 +204,10 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Acest buton are rolul de a ne trimite inapoi la interfata grafica de unde a fost invocata interfata curenta, lucru ce se
+     * face prin variabila which.
+     */
     private void backButton(){
         back.addActionListener(new ActionListener() {
             @Override
@@ -200,6 +223,9 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Ne delogheaza din contul curent si inchide conexiunea facuta de catre card la baza de date.
+     */
     private void logoutButton(){
         logout.addActionListener(new ActionListener() {
             @Override
@@ -212,6 +238,9 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Prin apasarea butonului de schimbare a parolei se apeleaza interfata respectiva cu aceasta operatiune.
+     */
     private void changePasswordButton(){
         changePassword.addActionListener(new ActionListener() {
             @Override
@@ -224,6 +253,10 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Buton prin intermediul caruia se schimba cardul curent. In functie de numarul de carduri de pe cont, se va apela interfata
+     * corespunzatoare sau se va afisa un mesaj daca se poate/nu se poate schimba cardul(la 0 sau 1 card);
+     */
     private void changeButton(){
         changeCard.addActionListener(new ActionListener() {
             @Override
@@ -259,6 +292,11 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Prin acest buton se realizeaza stergerea totala a datelor contului activ. Utilizatorul va fi intrebat daca doreste sau nu
+     * acest lucru, in caz afirmativ contul va fi sters iar variabila de auto_increment(pentru cardID) va fi resetata la indicele
+     * posibil neutilizat.
+     */
     private void deleteAccountButton(){
         deleteAccount.addActionListener(new ActionListener() {
             @Override
@@ -329,6 +367,11 @@ public class Settings extends JFrame {
         });
     }
 
+    /**
+     * Buton prin intermediul caruia se adauga un card. Se verifica daca exista card activ pe contul logat, astfel incat in cazul
+     * neexistentei cardurilor, se presupune ca nu exista card de salar si se va crea unul. Altfel, cardul creat va fi normal,
+     * fara un venit lunar.
+     */
     private void addCardButton(){
         addCard.addActionListener(new ActionListener() {
             @Override
@@ -361,7 +404,7 @@ public class Settings extends JFrame {
     }
 
     private void createImg(){
-        ImageIcon img=new ImageIcon("/home/cipri/Downloads/technical-support.png");
+        ImageIcon img=new ImageIcon("./imagini/technical-support.png");
         image=new JLabel("",img,JLabel.CENTER);
     }
 
@@ -427,7 +470,7 @@ public class Settings extends JFrame {
         blockCard.setText("BlockCard");
         deleteAccount.setText("DeleteAccount");
         logout.setText("Logout");
-        back.setIcon(new ImageIcon("/home/cipri/Downloads/left-arrow.png"));
+        back.setIcon(new ImageIcon("./imagini/left-arrow.png"));
         back.setBorderPainted(false);
         hello.setText("Hello, "+this.username);
     }

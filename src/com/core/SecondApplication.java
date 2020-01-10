@@ -68,6 +68,9 @@ public class SecondApplication extends JFrame {
         SwingUtilities.invokeLater(currentFocus::requestFocus);
     }
 
+    /**
+     * Face transferul catre interfata grafica destinata setarilor. Se apeleaza constructorul pentru interfata de Setari
+     */
     private void settingsAction(){
         settings.addActionListener(new ActionListener() {
             @Override
@@ -80,6 +83,9 @@ public class SecondApplication extends JFrame {
         });
     }
 
+    /**
+     * Face legatura dintre cele 2 interfete pentru gestiunea operatiilor cardului.
+     */
     private void makeSwitch(){
         switchPage.addActionListener(new ActionListener() {
             @Override
@@ -93,10 +99,13 @@ public class SecondApplication extends JFrame {
     }
 
     private void setImage(){
-        ImageIcon img=new ImageIcon("/home/cipri/Downloads/online-shop.png");
+        ImageIcon img=new ImageIcon("/home/cipri/Aplicatie Bancara/imagini/online-shop.png");
         image=new JLabel("",img,JLabel.CENTER);
     }
 
+    /**
+     * Se apeleaza interfata grafica specifica fiecarui buton apasat.
+     */
     private void makeButtons(){
         IBAN.addActionListener(new ActionListener() {
             @Override
@@ -208,7 +217,7 @@ public class SecondApplication extends JFrame {
         page2.add(currentFocus);
 
         switchPage.setText("SwitchPage");
-        settings.setIcon(new ImageIcon("/home/cipri/Downloads/settings.png"));
+        settings.setIcon(new ImageIcon("/home/cipri/Aplicatie Bancara/imagini/settings.png"));
         settings.setBorderPainted(false);
 
         GroupLayout layout = new GroupLayout(getContentPane());

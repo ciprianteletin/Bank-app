@@ -6,7 +6,14 @@ import java.util.Random;
 
 import com.URL;
 
-//LA SIGN UP si ADD CARD, generam card de aici;
+/**
+ * Clasa abstracta(pentru ca nu se doreste creearea de instante a unor obiecte de acest tip)
+ * In cadrul acestei clase se genereaza toate detaliile legate de cardul bancar corespunzator
+ * Aceste detalii sunt alese in mod aleator, prin folosirea unui obiect de tip Random.
+ * Totusi, se tine cont de 3 criterii: Daca clientul are sub 26 de ani sau este student,
+ * caz in care acesta poate avea un singur card activ; Daca clientul este neangajat(unemployed),
+ * caz in care are salariul mic(somaj/ajutor social); Daca acesta are deja un card de salariu activ sau nu
+ */
 public abstract class GenerateCard {
     //method to generate cards; the first one will keep the salary in it, and of course here will be the main wealth of the user;
 
@@ -172,7 +179,11 @@ public abstract class GenerateCard {
         }
     }
 
-
+    /**
+     * Metoda statica pentru generarea unui IBAN, ce tine cont de modul de organizare a unui IBAN real(precum tara, cifru, etc)
+     * @param banca
+     * @return
+     */
     private static String generateIban(Banci banca){
         StringBuilder IBAN=new StringBuilder("RO");
         Random r=new Random();

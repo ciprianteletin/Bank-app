@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * Clasa ce permite utilizatorului sa faca conversia soldului curent in alta moneda de care dispune aplicatia. Aplicatia dispune de
+ * trei monede: Euro, Lira, Dolar;
+ */
 public class SchimbaCurs {
     private Enable enable;
     private Card card;
@@ -65,6 +69,11 @@ public class SchimbaCurs {
         display.add(change);
     }
 
+    /**
+     * Se verifica daca moneda la care se face convertirea nu este cea actuala. Daca este cea actuala, se va afisa un mesaj de eroare. In
+     * caz contrar, se va face trecerea folosind cursul valutar din ziua respectiva si comisioanele cardului. Utilizatorul va fi atentionat
+     * de taxele de conversie aplicabile. Datele cardului vor fi actualizate la final, si implicit cele din cadrul bazei de date
+     */
     private void configButton(){
         change.addActionListener(new ActionListener() {
             @Override
@@ -72,7 +81,7 @@ public class SchimbaCurs {
                 //cast
                 String choice=(String)currency.getSelectedItem();
                 enable.enable();
-                //not null bruh
+                //not null
                 if(choice.equals(card.getMoneda()))
                     JOptionPane.showMessageDialog(null,"Your currency is already the one selected!");
                 else{

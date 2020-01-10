@@ -191,11 +191,15 @@ public class LoginInterface {
     }
 
     private void createImage(){
-        ImageIcon image=new ImageIcon("/home/cipri/Downloads/shopping-store.png");
+        ImageIcon image=new ImageIcon("./imagini/shopping-store.png");
         JLabel label=new JLabel("",image,JLabel.CENTER);
         info.add(label);
     }
 
+    /**
+     * Adding events to my buttons. Login button has multiple scopes, like checking if the data is correct(by calling other methods),
+     * checking the cards number on the account and picking the right interface to deal with multiple cards and multiple information.
+     */
     private void buttonAction() {
         logIn.addActionListener((ae) -> {
             if(!checkInputs()){
@@ -309,6 +313,10 @@ public class LoginInterface {
         });
     }
 
+    /**
+     * Methods which helps me to check if the data inserted by the user respect the specific format from SignUp(described in manual)
+     * @return
+     */
     private boolean checkInputs(){
         return checkUser() && checkPassowrd();
     }

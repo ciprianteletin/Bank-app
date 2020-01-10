@@ -10,6 +10,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
+/**
+ * Interfata grafica ce are ca si scop schimbarea parolei contului curent, apelata in momentul apasarii butonului ChangePass din cadrul
+ * interfetei grafice Settings.
+ */
 public class ChangePassword {
     private JFrame display;
     private JLabel pass,changePass;
@@ -166,6 +170,9 @@ public class ChangePassword {
         });
     }
 
+    /**
+     * In cazul in care utilizatorul doreste renuntarea la aceasta operatie, ne intoarcem inapoi la pagina de setari.
+     */
     private void cancelButton(){
         cancel.addActionListener(new ActionListener() {
             @Override
@@ -180,6 +187,12 @@ public class ChangePassword {
         });
     }
 
+    /**
+     * In momentul in care utilizatorul apasa butonul de confirmare, se verifica corectitudinea datelor corecte(daca corespund,
+     * daca datele respecta formatul de la SignUp, daca noua parola nu e cea actuala, cazuri in care se pot afisa mesaje de eroare).
+     * Daca totul este corect, noua parola se cripteaza prin utilizarea clasei Encrypt si apoi se introduce in baza de date in
+     * cadrul contului asociat.
+     */
     private void confirmButton(){
         confirm.addActionListener(new ActionListener() {
             @Override

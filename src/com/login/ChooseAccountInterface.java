@@ -67,7 +67,8 @@ public class ChooseAccountInterface {
     }
     /**
     If user presses exit on this interface, I will delete all the new records data that has no correspondent;
-     Correspondent means that it has no card registered;
+     Correspondent means that it has no card registered; This was a problem although, because when I removed all my cards
+     from the Settings interface, there was a possibility that my client could lost his account(solved)
      **/
     private void closeApp(){
         account.addWindowListener(new WindowAdapter() {
@@ -391,6 +392,12 @@ public class ChooseAccountInterface {
         expireDate.setForeground(new Color(150,150,200));
     }
 
+    /**
+     * Event for checking the provided information and if I can create a card(if the card number is less or equal to a specific
+     * card limit).
+     * If it's the second or my third card that I want to create, it will be set to "false" because I have a active card already
+     * (the one that is used to access the button from Settings interface). Also, via this, I insert card info in my database.
+     */
     private void buttonOnAction(){
         confirm.addActionListener((ae)->{
             if(checkNotEmpty())
@@ -470,7 +477,7 @@ class ImagePanel extends JPanel{
 
     ImagePanel() {
         try {
-            image = ImageIO.read(new File("/home/cipri/Downloads/bank.jpg"));
+            image = ImageIO.read(new File("./imagini/bank.jpg"));
         } catch (IOException ex) {
             System.out.println("Image not found...closing the program");
             System.exit(-1);
@@ -489,5 +496,3 @@ class ImagePanel extends JPanel{
         g.drawImage(image, 0, 0, this);
     }
 }
-
-//TODO verify data with Automata and set up the confirm data

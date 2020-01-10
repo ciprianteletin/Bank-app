@@ -15,6 +15,10 @@ public class Emag extends Scrapper {
         super(url);
     }
 
+    /**
+     * Aceasta metoda imi salveaza pretul in int, rotunjit, deoarece pretul salvat din cadrul paginii este unul specific paginilor web
+     * ce se ocupa de marketing(ex. 489.99)
+     */
     private void makePrice(){
         StringBuilder copy= new StringBuilder();
         for(int i=0; i<this.price.length();++i) {
@@ -25,6 +29,10 @@ public class Emag extends Scrapper {
         this.prc=Integer.parseInt(copy.toString())+1;
     }
 
+    /**
+     * Metoda ce imi extrage din codul html ce incapsuleaza informatia pretul curent al produsului
+     * @param value
+     */
     private void getPrice(Elements value){
         value=value.select("p.product-new-price");
         String[] splitter=value.text().split(" ");
@@ -34,6 +42,10 @@ public class Emag extends Scrapper {
         makePrice();
     }
 
+    /**
+     * In cadrul acestei metode extrag documentul html din cadrul conexiunii cu pagina emag, dupa care extrag gruparile de date(
+     * in functie de div) pentru a extrage informatia precisa din fiecare grup in parte
+     */
     @Override
     public void scrape() {
         try {

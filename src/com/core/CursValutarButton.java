@@ -5,6 +5,10 @@ import com.cardGenerator.Currency;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Interfata are ca si scop afisarea cursului valutar curent din ziua respectiva, fiind formata din label-uri, fiecare coloana
+ * din cadrul campului avand cate o semnificatie(lucru precizat pe primul rand al interfetei)
+ */
 public class CursValutarButton extends JFrame {
     private JLabel vandDolar, vandLira, vanzare, euro, dolar;
     private JLabel lira, cumparEuro, cumparDolar, cumparLira, vandEuro, cumparare;

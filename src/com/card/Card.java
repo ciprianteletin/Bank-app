@@ -6,7 +6,12 @@ import com.cardGenerator.Currency;
 import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDate;
-
+/**
+ * Clasa prin intermediul careia se creeaza un card bancar prin preluarea datelor din baza de date. Clasa card este folosita in cadrul
+ * interfetelor de gestionare a soldului curent(obiect prin care se realizeaza operatii bancare),
+ * dar si in cea in ceea ce priveste setarile cardului curent activ.
+ * Prin intermediul ei, de asemenea, se gestioneaza virarea salariului si limita de efectuare a operatiilor zilnice.
+ */
 public class Card {
     private double suma;
     private double lim_transfer;
@@ -20,6 +25,10 @@ public class Card {
     private int ID;
     private Connection conn;
 
+    /**
+     * Constructorul clasei, prin care se realizeaza conexiunea unica pentru toate metodele clasei in sine;
+     * Punctul de apel al restul metodelor
+     */
     public Card(String username){
         this.username=username;
         try{
@@ -34,6 +43,11 @@ public class Card {
         checkLimita();
     }
 
+    /**
+     * Metoda prin intermediul caruia se verifica daca este necesar sa se vireze salariul clientului sau nu. In cazul in care salariul
+     * trebuie virat(am depasit data de virament iar acesta nu a fost transmis catre client), se va actualiza tabelul card_type unde
+     * retinem daca banii au fost virati sau nu, iar tranzactia se depunde in tabela tranzactii;
+     */
     private void checkVirat(){
         try{
             PreparedStatement pst=conn.prepareStatement("SELECT data_virament,venit_lunar FROM financiar " +
@@ -84,7 +98,11 @@ public class Card {
             System.exit(1);
         }
     }
-
+    /**
+     *Metoda prin intermediul careia se reseteaza zilnic limita de transfer din cazul cardului nostru. Fiecare card are asociata
+     *o limita de bani pentru efectuarea operatiei, ce trebuie zilnic resetata pentru a permite utilizatorului sa realizeze ce
+     *isi doreste
+     */
     private void checkLimita(){
         try{
             PreparedStatement pst=conn.prepareStatement("SELECT limita_transfer,zi FROM data_limit WHERE cardID=?");
@@ -118,7 +136,10 @@ public class Card {
             System.exit(1);
         }
     }
-
+    /**
+     *Metoda prin intermediul careia se extrag din baza de date si din tabelele corespunzatoare datele referitoare
+     * la cardul activ cu scopul de a fi stocate in cadrul obiectului nostru.
+     */
     public void updateCardDetails(){
         try{
             PreparedStatement pst=conn.prepareStatement("SELECT cd.cardID FROM card_data cd " +
@@ -150,6 +171,11 @@ public class Card {
         }
     }
 
+    /**
+     * Metoda ce are ca si scop actualizarea campului "blocked" in cazul in care cardul a fost blocat din setari.
+     * @param ID
+     * @throws SQLException
+     */
     private void updateBlock(int ID) throws SQLException{
         PreparedStatement pst=conn.prepareStatement("SELECT blocked FROM card_type WHERE cardID=?");
         pst.setInt(1,ID);
@@ -161,7 +187,10 @@ public class Card {
     public boolean isBlocked(){
         return !block.equals("A");
     }
-
+    /**
+     * Prin intermediul acestei metode actualizez informatiile fincanicare referitoare la card in urma efectuarii unei operatii
+     * de acest tip. Dupa fiecare apel in care se efectueaza o modificare, aceasta metoda va fi apelata
+     */
     public void updateDB(){
         try{
             PreparedStatement pst=conn.prepareStatement("UPDATE financiar SET suma=?,lim_transfer=?,moneda=?" +
@@ -248,6 +277,11 @@ public class Card {
         }
     }
 
+    /**
+     * Verific daca data de expirare a fost atinsa sau depasita, metoda returnand o valoare booleana ce indica acest lucru
+     * @param expire
+     * @return
+     */
     public static boolean verifyExpireDate(String expire){
         String[] date=expire.split("/");
         int month=Integer.parseInt(date[0]);
@@ -265,6 +299,12 @@ public class Card {
         return true;
     }
 
+    /**
+     * In momentul in care cardul a expirat si clientul doreste prelungirea acestuia, se apeleaza aceasta metoda ce are ca si scop
+     * prelungirea si actualizarea datelor din cadrul bazei de date.
+     * @param expire
+     * @param cardID
+     */
     public static void expandContract(String expire,int cardID){
         String[] date=expire.split("/");
         int month=Integer.parseInt(date[0]);
@@ -283,21 +323,5 @@ public class Card {
             JOptionPane.showMessageDialog(null,"Can't launch the app..Closing everything");
             System.exit(1);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "suma=" + suma +
-                ", lim_transfer=" + lim_transfer +
-                ", moneda='" + moneda + '\'' +
-                ", com_online=" + com_online +
-                ", com_factura=" + com_factura +
-                ", com_transfer=" + com_transfer +
-                ", dobanda=" + dobanda +
-                ", block='" + block + '\'' +
-                ", username='" + username + '\'' +
-                ", ID=" + ID +
-                '}';
     }
 }

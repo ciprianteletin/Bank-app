@@ -9,6 +9,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
+/**
+ * Clasa FileChooser este folosita in momentul apasarii butonului de print(imprimanta mai exact) din cadrul interfetei grafice
+ * ce afiseaza IBAN-ul si datele cardului curent;
+ */
 public class FileChooser {
     private JFrame display;
     private JButton chooseFile,print;
@@ -61,7 +65,7 @@ public class FileChooser {
         name.setPreferredSize(new Dimension(440,35));
         name.setEnabled(false);
         chooseFile=new JButton();
-        chooseFile.setIcon(new ImageIcon("/home/cipri/Downloads/floppy-disk.png"));
+        chooseFile.setIcon(new ImageIcon("./imagini/floppy-disk.png"));
         chooseFile.setBorderPainted(false);
         chooseFile.setFocusPainted(false);
         chooseFile.setBackground(new Color(56,56,56));
@@ -88,6 +92,10 @@ public class FileChooser {
         display.add(printPanel);
     }
 
+    /**
+     * Creearea unui FileChooser pentru a permite utilizatorului sa aleaga locul unde se va salva fisierul
+     * Pentru acest FileChooser am ales actiunea de selectare doar a directoarelor(nu sunt necesare fisierele)
+     */
     private void makeFileChooser(){
         chooseFile.addActionListener(new ActionListener() {
             @Override
@@ -138,7 +146,10 @@ public class FileChooser {
             }
         });
     }
-
+    /**
+    Metoda pentru verificarea existentei unui fisier cu numele selectat de utilizator, capacitatea de a-l suprascrie, cat si crearea
+     documentului propriu-zis prin instantierea unui obiect de tip PDF si apelarea metodei createDoc().
+     */
     private void makePDF(){
         print.addActionListener(new ActionListener() {
             @Override

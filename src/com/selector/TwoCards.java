@@ -10,6 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
+/**
+ * Aceasta clasa are rolul de a ajuta utilizatorul sa aleaga cardul dorit pentru utilizare, in cazul in care acesta are 2 carduri pe
+ * acelasi cont. Cardurile bancare sunt reprezentate de cate un buton, care prin apasarea lui va seta in baza de date cardul activ(cel selectat),
+ * restul fiind setate cu F, fiind neactive. De asemenea, interfata este folosita si cand utilizatorul doreste sa elimine un card anume,
+ * in cazul in care acesta dispune de multiple carduri bancare.
+ */
 public class TwoCards extends JFrame {
     private JButton card1, card2;
     private JLabel bancaCard1, numarCard1, bancaCard2;
@@ -189,16 +195,19 @@ public class TwoCards extends JFrame {
         }
     }
 
+    /**
+     * Creare de componente, initializarea lor si asezarea in pagina.
+     */
     private void initComponents() {
         card1 = new JButton();
         card1.setBackground(new Color(56, 56, 56));
         card1.setForeground(new Color(255, 255, 255));
-        card1.setIcon(new ImageIcon("/home/cipri/Downloads/card1.png"));
+        card1.setIcon(new ImageIcon("./imagini/card1.png"));
         card1.setBorderPainted(false);
         card2 = new JButton();
         card2.setBackground(new Color(56, 56, 56));
         card2.setForeground(new Color(255, 255, 255));
-        card2.setIcon(new ImageIcon("/home/cipri/Downloads/card2.png"));
+        card2.setIcon(new ImageIcon("./imagini/card2.png"));
         card2.setBorderPainted(false);
         bancaCard1 = new JLabel();
         bancaCard1.setForeground(new Color(255, 255, 255));
