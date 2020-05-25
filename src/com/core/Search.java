@@ -41,7 +41,7 @@ public class Search {
         this.card=c;
         this.enable=e;
         try{
-            conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            conn= DriverManager.getConnection(URL.url,"root","linux_mint");
         }catch (SQLException sql){
             JOptionPane.showMessageDialog(null,"Can't connect to database...closing the app",
                     "Fatal error",JOptionPane.WARNING_MESSAGE);

@@ -42,7 +42,7 @@ public class TwoCards extends JFrame {
 
     private void makeID(int ID){
         try{
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=conn.prepareStatement("SELECT expire_date FROM card_data WHERE cardID=?");
             pst.setInt(1,ID);
             ResultSet rs=pst.executeQuery();
@@ -80,7 +80,7 @@ public class TwoCards extends JFrame {
 
     private void removeCard(int ID){
         try{
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
 
             PreparedStatement pst=conn.prepareStatement("DELETE FROM tranzactii WHERE cardID=?");
             pst.setInt(1,ID);
@@ -141,7 +141,7 @@ public class TwoCards extends JFrame {
 
     private void makeCardsF(){
         try{
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
             pst.setString(1,username);
             ResultSet rs=pst.executeQuery();
@@ -162,7 +162,7 @@ public class TwoCards extends JFrame {
     private void updateData(){
         try{
             int contor=1;
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=conn.prepareStatement("SELECT cardID,number FROM card_data WHERE user=?");
             pst.setString(1,username);
             ResultSet rs=pst.executeQuery();

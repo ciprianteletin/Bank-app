@@ -191,7 +191,7 @@ public class LoginInterface {
     }
 
     private void createImage(){
-        ImageIcon image=new ImageIcon("./imagini/shopping-store.png");
+        ImageIcon image=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\shopping-store.png");
         JLabel label=new JLabel("",image,JLabel.CENTER);
         info.add(label);
     }
@@ -209,7 +209,7 @@ public class LoginInterface {
                 JOptionPane.showMessageDialog(frame,"You can't have empty fields!","Empty fields",JOptionPane.WARNING_MESSAGE);
             }else{  Connection connection=null;
                 try {
-                    connection = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                    connection = DriverManager.getConnection(URL.url, "root", "linux_mint");
                     PreparedStatement pt=connection.prepareStatement("SELECT user FROM users WHERE user=?");
                     pt.setString(1,user.getText());
                     ResultSet rs=pt.executeQuery();

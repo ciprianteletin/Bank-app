@@ -75,7 +75,7 @@ public class IbanDisplay {
      */
     private void takeData(){
         try {
-            Connection c = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+            Connection c = DriverManager.getConnection(URL.url, "root", "linux_mint");
             PreparedStatement pst=c.prepareStatement("SELECT first_name,last_name FROM users WHERE user=?");
             pst.setString(1,username);
             ResultSet rs=pst.executeQuery();
@@ -144,7 +144,7 @@ public class IbanDisplay {
         print=new JButton();
         print.setBorderPainted(false);
         print.setBackground(new Color(20,50,50));
-        print.setIcon(new ImageIcon("./imagini/printer.png"));
+        print.setIcon(new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\printer.png"));
         SwingUtilities.invokeLater(inv1::requestFocus);
         east.add(inv1);
         east.add(print);

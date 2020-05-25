@@ -65,7 +65,7 @@ public class BlockUnblock{
 
                 String pass=password.getText();
                 try{
-                    Connection conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    Connection conn= DriverManager.getConnection(URL.url,"root","linux_mint");
                     PreparedStatement pst=conn.prepareStatement("SELECT password FROM passwords WHERE user=?");
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();

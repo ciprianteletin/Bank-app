@@ -32,7 +32,7 @@ public class Card {
     public Card(String username){
         this.username=username;
         try{
-            conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            conn=DriverManager.getConnection(URL.url,"root","linux_mint");
         }catch (SQLException sql){
             JOptionPane.showMessageDialog(null,"Can't create my card...closing the app",
                     "Critical error",JOptionPane.WARNING_MESSAGE);
@@ -312,7 +312,7 @@ public class Card {
         ++year;
         String newDate=month+"/"+year;
         try{
-            Connection connection=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection connection=DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=connection.prepareStatement("UPDATE card_data SET expire_date=? WHERE cardID=?");
             pst.setString(1,newDate);
             pst.setInt(2,cardID);

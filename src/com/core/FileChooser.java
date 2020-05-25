@@ -60,12 +60,13 @@ public class FileChooser {
         choosePanel=new JPanel();
         choosePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         choosePanel.setBackground(new Color(56,56,56));
-        choosePanel.setSize(550,100);
+        choosePanel.setPreferredSize(new Dimension(550,100));
         name=new JTextField();
-        name.setPreferredSize(new Dimension(440,35));
+        name.setPreferredSize(new Dimension(400,35));
         name.setEnabled(false);
+        name.setBackground(new Color(255,50,50));
         chooseFile=new JButton();
-        chooseFile.setIcon(new ImageIcon("./imagini/floppy-disk.png"));
+        chooseFile.setIcon(new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\floppy-disk.png"));
         chooseFile.setBorderPainted(false);
         chooseFile.setFocusPainted(false);
         chooseFile.setBackground(new Color(56,56,56));
@@ -106,7 +107,7 @@ public class FileChooser {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int result=chooser.showOpenDialog(null);
                 if(result==JFileChooser.APPROVE_OPTION) {
-                    pathName.setText(chooser.getSelectedFile().getAbsolutePath()+"/");
+                    pathName.setText(chooser.getSelectedFile().getAbsolutePath()+"\\");
                     oldPath=pathName.getText();
                     name.setEnabled(true);
                 }

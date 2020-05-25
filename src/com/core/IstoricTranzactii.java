@@ -69,7 +69,7 @@ public class IstoricTranzactii {
         tranzactii.addItem("20");
         String total="All"; int nr=0;
         try{
-            Connection conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn= DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM tranzactii WHERE cardID=?");
             pst.setInt(1,card.getID());
             ResultSet rs=pst.executeQuery();
@@ -116,7 +116,7 @@ public class IstoricTranzactii {
                 if(!number.contains("All")){
                     nr = Integer.parseInt(number);
                    try{
-                        Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                         PreparedStatement pst=conn.prepareStatement("SELECT name,price,moneda,buy_date FROM tranzactii " +
                                 "WHERE cardID=? ORDER BY buy_date LIMIT ?");
                         pst.setInt(1,card.getID());
@@ -137,7 +137,7 @@ public class IstoricTranzactii {
                     }
                 }else{
                     try{
-                        Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                         PreparedStatement pst=conn.prepareStatement("SELECT name,price,moneda,buy_date FROM tranzactii " +
                                 "WHERE cardID=? ORDER BY buy_date");
                         pst.setInt(1,card.getID());

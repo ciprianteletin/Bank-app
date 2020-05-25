@@ -41,14 +41,14 @@ class SingUpInterface{
         insertBoxes.setPreferredSize(new Dimension(500,1000));
         insertBoxes.setBackground(new Color(0,128,128));
         insertBoxes.setLayout(new FlowLayout(FlowLayout.CENTER,5,60));
-        ImageIcon img=new ImageIcon("./imagini/rename.png");
+        ImageIcon img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\rename.png");
         Image resize=img.getImage().getScaledInstance(220,250,Image.SCALE_DEFAULT);
         img=new ImageIcon(resize);
         JLabel label=new JLabel("",img,JLabel.CENTER);
         label.setMaximumSize(new Dimension(200,200));
         insertBoxes.add(label);
         JLabel star;
-        img=new ImageIcon("./imagini/star.png");
+        img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\star.png");
         resize=img.getImage().getScaledInstance(35,35,Image.SCALE_SMOOTH);
         img=new ImageIcon(resize);
         star=new JLabel("",img,JLabel.CENTER);
@@ -170,7 +170,7 @@ class SingUpInterface{
     }
 
     private void makeStar(){
-        ImageIcon img=new ImageIcon("./imagini/star.png");
+        ImageIcon img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\star.png");
         Image resize=img.getImage().getScaledInstance(35,35,Image.SCALE_SMOOTH);
         img=new ImageIcon(resize);
         JLabel star=new JLabel("",img,JLabel.CENTER);
@@ -601,7 +601,7 @@ class SingUpInterface{
                 Connection connection=null;
                 if(ch.errorWindow()) {
                     try{
-                        connection=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        connection=DriverManager.getConnection(URL.url,"root","linux_mint");
                         Statement stm=connection.createStatement();
                         ResultSet rs=stm.executeQuery("SELECT user FROM users WHERE user='"+username.getText()+"'");
                         if(!rs.next()){

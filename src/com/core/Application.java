@@ -50,7 +50,7 @@ public class Application extends JFrame{
 
         private void createCard(){
             try{
-                Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                Connection c= DriverManager.getConnection(URL.url,"root","linux_mint");
                 PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                 pst.setString(1,username);
                 ResultSet rs=pst.executeQuery();
@@ -136,7 +136,7 @@ public class Application extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     try{
-                        Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                         PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                         pst.setString(1,username);
                         ResultSet rs=pst.executeQuery();
@@ -166,7 +166,7 @@ public class Application extends JFrame{
         }
 
         private void setImage(){
-            ImageIcon img=new ImageIcon("./imagini/online-shop.png");
+            ImageIcon img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\online-shop.png");
             image=new JLabel("",img,JLabel.CENTER);
         }
 
@@ -278,7 +278,7 @@ public class Application extends JFrame{
             );
 
             switchPage.setText("SwitchPage");
-            settings.setIcon(new ImageIcon("./imagini/settings.png"));
+            settings.setIcon(new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\settings.png"));
             settings.setBorderPainted(false);
 
             GroupLayout layout = new GroupLayout(getContentPane());

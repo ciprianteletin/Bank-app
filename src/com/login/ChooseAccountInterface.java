@@ -74,7 +74,7 @@ public class ChooseAccountInterface {
         account.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 try {
-                    Connection connection = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                    Connection connection = DriverManager.getConnection(URL.url, "root", "linux_mint");
                     PreparedStatement pst=connection.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();
@@ -405,7 +405,7 @@ public class ChooseAccountInterface {
                         JOptionPane.WARNING_MESSAGE);
             else if(checkData()) {
                 try {
-                    Connection connection = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                    Connection connection = DriverManager.getConnection(URL.url, "root", "linux_mint");
                     PreparedStatement pt=connection.prepareStatement("SELECT user FROM card_data WHERE user=?");
                     pt.setString(1,username);
                     ResultSet result=pt.executeQuery();
@@ -477,7 +477,7 @@ class ImagePanel extends JPanel{
 
     ImagePanel() {
         try {
-            image = ImageIO.read(new File("./imagini/bank.jpg"));
+            image = ImageIO.read(new File("D:\\Aplicatie Bancara\\src\\imagini\\bank.jpg"));
         } catch (IOException ex) {
             System.out.println("Image not found...closing the program");
             System.exit(-1);

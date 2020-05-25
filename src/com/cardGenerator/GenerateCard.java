@@ -60,7 +60,7 @@ public abstract class GenerateCard {
         }
         boolean sumCard=true;
         try{
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=conn.prepareStatement("SELECT cd.cardID,venit_lunar FROM card_data cd INNER JOIN financiar f ON cd.cardID=f.cardID " +
                     "WHERE user=? AND venit_lunar>0");
             pst.setString(1,user);
@@ -111,7 +111,7 @@ public abstract class GenerateCard {
         */
 
         try{
-            Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
 
             PreparedStatement pt=conn.prepareStatement("INSERT INTO card_data (user, number, cvv, expire_date, IBAN) " +
                     "VALUES (?,?,?,?,?)");

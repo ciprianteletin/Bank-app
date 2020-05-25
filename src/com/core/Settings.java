@@ -72,7 +72,7 @@ public class Settings extends JFrame {
      */
     private void createCard(){
         try{
-            Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection c= DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
             pst.setString(1,username);
             ResultSet rs=pst.executeQuery();
@@ -121,7 +121,7 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                     PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();
@@ -262,7 +262,7 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try{
-                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                     PreparedStatement pst=conn.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();
@@ -305,7 +305,7 @@ public class Settings extends JFrame {
                         "Are you sure about this operation?","Delete account",JOptionPane.YES_NO_OPTION);
                 if(del==JOptionPane.YES_OPTION){
                     try {
-                        Connection conn = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                        Connection conn = DriverManager.getConnection(URL.url, "root", "linux_mint");
                         //passwords table
                         PreparedStatement pst=conn.prepareStatement("DELETE FROM passwords WHERE user=?");
                         pst.setString(1,username);
@@ -377,7 +377,7 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try{
-                    Connection conn=DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                    Connection conn=DriverManager.getConnection(URL.url,"root","linux_mint");
                     PreparedStatement pst=conn.prepareStatement("SELECT birthday,job FROM info WHERE user=?");
                     pst.setString(1,username);
                     ResultSet rs=pst.executeQuery();
@@ -404,7 +404,7 @@ public class Settings extends JFrame {
     }
 
     private void createImg(){
-        ImageIcon img=new ImageIcon("./imagini/technical-support.png");
+        ImageIcon img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\technical-support.png");
         image=new JLabel("",img,JLabel.CENTER);
     }
 
@@ -470,7 +470,7 @@ public class Settings extends JFrame {
         blockCard.setText("BlockCard");
         deleteAccount.setText("DeleteAccount");
         logout.setText("Logout");
-        back.setIcon(new ImageIcon("./imagini/left-arrow.png"));
+        back.setIcon(new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\left-arrow.png"));
         back.setBorderPainted(false);
         hello.setText("Hello, "+this.username);
     }

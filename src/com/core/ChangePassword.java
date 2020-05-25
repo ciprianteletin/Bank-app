@@ -212,7 +212,7 @@ public class ChangePassword {
                 }
                 else{
                     try{
-                        Connection conn= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+                        Connection conn= DriverManager.getConnection(URL.url,"root","linux_mint");
                         PreparedStatement pst=conn.prepareStatement("SELECT password FROM passwords " +
                                 "WHERE user=?");
                         pst.setString(1,username);

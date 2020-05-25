@@ -50,7 +50,7 @@ public class SecondApplication extends JFrame {
 
     private void createCard(){
         try{
-            Connection c= DriverManager.getConnection(URL.url,"cipri","linux_mint");
+            Connection c= DriverManager.getConnection(URL.url,"root","linux_mint");
             PreparedStatement pst=c.prepareStatement("SELECT cardID FROM card_data WHERE user=?");
             pst.setString(1,username);
             ResultSet rs=pst.executeQuery();
@@ -99,7 +99,7 @@ public class SecondApplication extends JFrame {
     }
 
     private void setImage(){
-        ImageIcon img=new ImageIcon("/home/cipri/Aplicatie Bancara/imagini/online-shop.png");
+        ImageIcon img=new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\online-shop.png");
         image=new JLabel("",img,JLabel.CENTER);
     }
 
@@ -217,7 +217,7 @@ public class SecondApplication extends JFrame {
         page2.add(currentFocus);
 
         switchPage.setText("SwitchPage");
-        settings.setIcon(new ImageIcon("/home/cipri/Aplicatie Bancara/imagini/settings.png"));
+        settings.setIcon(new ImageIcon("D:\\Aplicatie Bancara\\src\\imagini\\settings.png"));
         settings.setBorderPainted(false);
 
         GroupLayout layout = new GroupLayout(getContentPane());

@@ -82,7 +82,7 @@ class Facturi {
                     }
                     enable.enable();
                     try {
-                        Connection conn = DriverManager.getConnection(URL.url, "cipri", "linux_mint");
+                        Connection conn = DriverManager.getConnection(URL.url, "root", "linux_mint");
                         PreparedStatement pst = conn.prepareStatement("INSERT INTO tranzactii VALUES (?,?,?,?,?)");
                         pst.setInt(1, card.getID());
                         pst.setString(2, "Factura "+furnizor.getText());
